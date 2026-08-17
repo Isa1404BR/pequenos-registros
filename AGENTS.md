@@ -26,6 +26,9 @@ O código deve priorizar:
 - React
 - TypeScript
 - Vite
+- React Router (v7, abordagem declarativa)
+- styled-components
+- TanStack Query
 - Supabase
 - PostgreSQL
 - Supabase Storage
@@ -124,6 +127,8 @@ Contém tipos e interfaces compartilhados.
 ### styles
 
 Contém tokens e configurações globais do design system.
+
+Estilização de componentes e telas será feita com styled-components. Cada screen/componente possui seu `styles.ts` com os styled-components correspondentes.
 
 ## Design
 

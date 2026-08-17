@@ -9,6 +9,7 @@
 - [ ] Configurar ESLint
 - [ ] Configurar Prettier
 - [ ] Conferir estrutura de pastas
+- [ ] Remover arquivos desnecessários do pacote Vite
 - [ ] Criar documentação
 - [ ] Configurar Supabase
 

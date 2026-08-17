@@ -86,15 +86,51 @@ Exemplos:
 
 ## Routing
 
-As rotas serão gerenciadas utilizando React Router.
+As rotas serão gerenciadas utilizando React Router v7, com a abordagem declarativa (`<Routes>`/`<Route>`).
 
-Rotas protegidas devem exigir autenticação.
+Não serão utilizadas as Data APIs (loaders/actions) neste projeto, para manter a simplicidade — o fetching de dados será feito via hooks (TanStack Query) dentro das screens/componentes.
 
-## Estado
+Rotas protegidas devem exigir autenticação, verificada através de `useAuth()` (AuthContext).
 
-Evitar gerenciamento global de estado sem necessidade.
+Estrutura de rotas prevista:
 
-Context API será utilizada apenas quando houver necessidade de estado global compartilhado.
+```
+App
+ │
+ React Router
+ │
+ ├── Públicas
+ │    ├── /login
+ │    └── /cadastro
+ │
+ └── Protegidas (exigem usuário autenticado)
+      ├── /album
+      ├── /configuracoes
+      └── /primeiros-passos
+```
+
+Um usuário com quem o álbum foi compartilhado (ver seção "Compartilhamento") também deve conseguir acessar `/album` em modo somente leitura, mesmo sem ser o dono do bebê — a autorização de escrita/edição é decidida a nível de service/RLS, não de rota.
+
+## Estado e dados remotos
+
+Evitar gerenciamento global de estado de UI sem necessidade.
+
+Context API será utilizada apenas quando houver necessidade de estado global compartilhado (ex: `AuthContext`).
+
+Para dados vindos do Supabase (fetch, cache, loading, refetch, invalidação após mutações), será utilizado TanStack Query dentro dos hooks (`useBaby`, `useMilestones`, etc.), em vez de implementar esse controle manualmente. Os hooks continuam sendo a única camada que os screens usam para acessar dados — a chamada ao service correspondente fica encapsulada dentro do `useQuery`/`useMutation`.
+
+## Compartilhamento
+
+Cada bebê possui um único álbum.
+
+O álbum pode ser compartilhado com outras pessoas através de e-mail (ver `babies.shared_with` em `database.md`).
+
+Um usuário com e-mail na lista de compartilhamento de um bebê:
+
+- pode visualizar o álbum daquele bebê.
+- não pode criar, editar, ocultar ou remover marcos, fotos ou dados do bebê.
+
+Apenas o usuário dono (`babies.user_id`) pode realizar edições. Essa regra deve ser garantida tanto na interface (ocultar ações de edição) quanto no banco (RLS).
 
 ## Dados
 
@@ -113,6 +149,10 @@ A interface deve funcionar em:
 - smartphones
 - tablets
 - desktops
+
+## Estilização
+
+A estilização de componentes e telas será feita utilizando styled-components.
 
 ## Segurança
 

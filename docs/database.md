@@ -37,8 +37,13 @@ Campos previstos:
 - nickname
 - birth_date
 - photo_url
+- shared_with
 - created_at
 - updated_at
+
+`shared_with` armazena uma lista de e-mails (array) com quem o álbum foi compartilhado. Cada bebê possui apenas um álbum, então o compartilhamento é feito diretamente na tabela `babies`, sem necessidade de tabela de junção.
+
+Usuários presentes em `shared_with` podem apenas visualizar o álbum — não podem editar, ocultar, adicionar ou remover marcos e fotos. Apenas o `user_id` (dono) pode realizar edições.
 
 ## baby_milestones
 
@@ -52,13 +57,18 @@ Campos previstos:
 - baby_id
 - title
 - description
+- event_date
 - is_hidden
 - created_at
 - updated_at
 
+Cada marco possui apenas uma descrição e uma data (`event_date`) — usada para ordenar os marcos cronologicamente. `created_at`/`updated_at` são metadados do registro, não a data do evento em si.
+
 ## photos
 
 Representa fotos associadas a um marco.
+
+Cada marco pode ter de 1 a 3 fotos (regra validada na aplicação).
 
 Campos previstos:
 
@@ -73,6 +83,11 @@ Campos previstos:
 Usuários devem conseguir acessar apenas os dados aos quais possuem permissão.
 
 Row Level Security (RLS) deverá ser utilizada.
+
+Regras de acesso previstas para `babies`, `baby_milestones` e `photos`:
+
+- o dono (`babies.user_id`) tem acesso total (leitura e escrita).
+- um usuário cujo e-mail esteja em `babies.shared_with` tem acesso apenas de leitura (`SELECT`).
 
 ## Migrations
 
