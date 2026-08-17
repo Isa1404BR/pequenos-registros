@@ -128,3 +128,10 @@ Possíveis opções:
 - fontes
 - estilos do álbum
 
+## Fora do escopo do MVP
+
+O Figma de fluxo já prevê alguns itens de tela que não fazem parte do MVP, mas que devem existir na interface (menu de Configurações) apontando para um estado "em breve", em vez de serem escondidos:
+
+- **Editar paleta de cores**: personalização visual (ver seção acima).
+- **Criar novo álbum**: suporte a múltiplos bebês/álbuns por conta. No MVP, cada conta possui um único bebê/álbum.
+

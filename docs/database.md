@@ -75,6 +75,7 @@ Campos previstos:
 - id
 - milestone_id
 - storage_path
+- tags (array com strings adicionadas pelo usuário ao adicionar a foto)
 - created_at
 - updated_at
 

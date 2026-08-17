@@ -92,7 +92,7 @@ Não serão utilizadas as Data APIs (loaders/actions) neste projeto, para manter
 
 Rotas protegidas devem exigir autenticação, verificada através de `useAuth()` (AuthContext).
 
-Estrutura de rotas prevista:
+Estrutura de rotas prevista (baseada no fluxo definido no Figma):
 
 ```
 App
@@ -104,10 +104,15 @@ App
  │    └── /cadastro
  │
  └── Protegidas (exigem usuário autenticado)
-      ├── /album
-      ├── /configuracoes
-      └── /primeiros-passos
+      ├── /cadastro-bebe        (onboarding, apenas quando o bebê ainda não existe)
+      ├── /home                 (resumo: idade, próximo marco, últimos registros)
+      ├── /album                (visualização e edição/registro de marcos)
+      ├── /familia               (lista de e-mails com acesso ao álbum)
+      └── /configuracoes        (editar bebê, editar marcos; itens fora do MVP
+                                 ficam visíveis levando a um estado "em breve")
 ```
+
+A navegação principal (Home / Álbum / Família / Configurações) é a mesma para todas as rotas protegidas.
 
 Um usuário com quem o álbum foi compartilhado (ver seção "Compartilhamento") também deve conseguir acessar `/album` em modo somente leitura, mesmo sem ser o dono do bebê — a autorização de escrita/edição é decidida a nível de service/RLS, não de rota.
 
@@ -131,6 +136,8 @@ Um usuário com e-mail na lista de compartilhamento de um bebê:
 - não pode criar, editar, ocultar ou remover marcos, fotos ou dados do bebê.
 
 Apenas o usuário dono (`babies.user_id`) pode realizar edições. Essa regra deve ser garantida tanto na interface (ocultar ações de edição) quanto no banco (RLS).
+
+Na tela "Família", a árvore ilustrativa é apenas decorativa — não representa dados reais (nomes, papéis ou fotos das pessoas convidadas). O controle de acesso real é a lista de e-mails em `babies.shared_with`, exibida abaixo da ilustração.
 
 ## Dados
 

@@ -106,3 +106,7 @@ Componentes iniciais:
 - PhotoCard
 - MilestoneCard
 - UploadImage
+
+### UploadImage — upload múltiplo de fotos em um marco
+
+Um marco pode ter de 1 a 3 fotos. A tela de edição/registro de marco começa com um único slot de upload; um botão "adicionar outra foto" permite incluir até mais 2 slots, de forma dinâmica (não são exibidos os 3 slots de uma vez).
