@@ -9,12 +9,12 @@
 - [x] Criar documentação (product-spec, architecture, database, design_system, roadmap)
 - [x] Definir stack de estilização (styled-components), roteamento (React Router v7 declarativo) e data-fetching (TanStack Query)
 - [x] Remover arquivos desnecessários do pacote Vite (App.tsx, index.css, icons.svg, README)
-- [ ] Configurar ESLint (revisar regras para o projeto)
-- [ ] Configurar Prettier
-- [ ] Instalar dependências definidas (react-router, styled-components, @tanstack/react-query, @supabase/supabase-js)
-- [ ] Conferir/criar estrutura de pastas (`assets/, components/, contexts/, hooks/, routes/, screens/, services/, styles/, types/, utils/`)
-- [ ] Criar tema/tokens iniciais em `styles/theme.ts` (cores, tipografia, radius, espaçamento)
-- [ ] Configurar Supabase (projeto, variáveis de ambiente)
+- [x] Configurar ESLint (revisar regras para o projeto)
+- [x] Configurar Prettier
+- [x] Instalar dependências definidas (react-router, styled-components, @tanstack/react-query, @supabase/supabase-js)
+- [x] Conferir/criar estrutura de pastas (`assets/, components/, contexts/, hooks/, routes/, screens/, services/, styles/, types/, utils/`)
+- [x] Criar tema/tokens iniciais em `styles/theme.ts` (cores, tipografia, radius, espaçamento)
+- [x] Configurar Supabase (projeto, variáveis de ambiente)
 
 ## Fase 2 — Banco
 
