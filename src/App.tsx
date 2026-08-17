@@ -1,11 +1,7 @@
-import styled from 'styled-components'
-
-const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.primary};
-`
+import { AppRoutes } from './routes/AppRoutes'
 
 function App() {
-  return <Title>Pequenos Registros</Title>
+  return <AppRoutes />
 }
 
 export default App

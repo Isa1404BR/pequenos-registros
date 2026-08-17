@@ -27,12 +27,12 @@
 
 ## Fase 3 — Autenticação
 
-- [ ] Cadastro
-- [ ] Login
-- [ ] Logout
-- [ ] Recuperação de senha
-- [ ] AuthContext / useAuth
-- [ ] Rotas protegidas (React Router v7 declarativo)
+- [x] Cadastro
+- [x] Login
+- [x] Logout
+- [x] Recuperação de senha
+- [x] AuthContext / useAuth
+- [x] Rotas protegidas (React Router v7 declarativo)
 
 ## Fase 4 — Onboarding
 
