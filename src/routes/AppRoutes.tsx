@@ -4,8 +4,10 @@ import Login from '../screens/Login'
 import Cadastro from '../screens/Cadastro'
 import EsqueciSenha from '../screens/EsqueciSenha'
 import RedefinirSenha from '../screens/RedefinirSenha'
+import CadastroBebe from '../screens/CadastroBebe'
 import Home from '../screens/Home'
 import { ProtectedRoute } from './ProtectedRoute'
+import { RequireBaby } from './RequireBaby'
 
 export function AppRoutes() {
   return (
@@ -16,7 +18,11 @@ export function AppRoutes() {
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/home" element={<Home />} />
+        <Route path="/cadastro-bebe" element={<CadastroBebe />} />
+
+        <Route element={<RequireBaby />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/home" replace />} />
