@@ -12,16 +12,21 @@ const Wrapper = styled.div`
 
 const Card = styled.div`
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.lg};
   text-align: center;
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  padding: ${({ theme }) => theme.spacing.xxl}
+    ${({ theme }) => theme.spacing.xl};
+  box-shadow: ${({ theme }) => theme.shadows.md};
 `
 
 const Brand = styled.h1`
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.text};
+  font-size: 1.375rem;
+  color: ${({ theme }) => theme.colors.primary};
 `
 
 const Title = styled.h2`

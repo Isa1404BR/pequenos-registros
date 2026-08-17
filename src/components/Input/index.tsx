@@ -9,21 +9,32 @@ const Wrapper = styled.div`
 `
 
 const Label = styled.label`
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  color: ${({ theme }) => theme.colors.text};
 `
 
 const StyledInput = styled.input`
-  border: 1px solid ${({ theme }) => theme.colors.secondary};
-  border-radius: ${({ theme }) => theme.radii.sm};
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border: 1.5px solid transparent;
+  background: ${({ theme }) => theme.colors.background};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+  border-radius: ${({ theme }) => theme.radii.md};
+  padding: ${({ theme }) => theme.spacing.md};
   font-size: 1rem;
   font-family: inherit;
   color: ${({ theme }) => theme.colors.text};
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text}99;
+  }
 
   &:focus {
-    outline: 2px solid ${({ theme }) => theme.colors.primary};
-    outline-offset: 1px;
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `
 

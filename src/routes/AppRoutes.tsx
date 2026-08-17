@@ -6,8 +6,12 @@ import EsqueciSenha from '../screens/EsqueciSenha'
 import RedefinirSenha from '../screens/RedefinirSenha'
 import CadastroBebe from '../screens/CadastroBebe'
 import Home from '../screens/Home'
+import Album from '../screens/Album'
+import Familia from '../screens/Familia'
+import Configuracoes from '../screens/Configuracoes'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RequireBaby } from './RequireBaby'
+import { AppLayout } from './AppLayout'
 
 export function AppRoutes() {
   return (
@@ -21,7 +25,12 @@ export function AppRoutes() {
         <Route path="/cadastro-bebe" element={<CadastroBebe />} />
 
         <Route element={<RequireBaby />}>
-          <Route path="/home" element={<Home />} />
+          <Route element={<AppLayout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/album" element={<Album />} />
+            <Route path="/familia" element={<Familia />} />
+            <Route path="/configuracoes" element={<Configuracoes />} />
+          </Route>
         </Route>
       </Route>
 

@@ -2,13 +2,28 @@ import { type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '../../components/Button'
-import { signOut } from '../../services/auth.service'
 import {
   useBaby,
   useBabyPhotoUrl,
   useUpdateBabyPhoto,
 } from '../../hooks/useBaby'
-import { PhotoImage, PhotoPlaceholder, PhotoWrapper, Wrapper } from './styles'
+import { useMilestones } from '../../hooks/useMilestones'
+import { calculateBabyAge } from '../../utils/calculateAge'
+import { getNextMilestone } from '../../utils/getNextMilestone'
+import {
+  AgeText,
+  BabyName,
+  Card,
+  CardTitle,
+  InfoCard,
+  MilestoneList,
+  MilestonesCount,
+  NextMilestoneRow,
+  PhotoImage,
+  PhotoPlaceholder,
+  PhotoWrapper,
+  Wrapper,
+} from './styles'
 
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024
 
@@ -17,11 +32,15 @@ function Home() {
   const { data: baby } = useBaby()
   const { data: photoUrl } = useBabyPhotoUrl(baby?.photo_url)
   const updateBabyPhoto = useUpdateBabyPhoto()
+  const { data: milestones = [] } = useMilestones(baby?.id)
 
-  const handleLogout = async () => {
-    await signOut()
-    navigate('/login')
-  }
+  const registeredMilestones = milestones.filter(
+    (milestone) => milestone.event_date,
+  )
+  const nextMilestone = getNextMilestone(milestones)
+  const lastRegisteredMilestones = [...registeredMilestones]
+    .sort((a, b) => (b.event_date ?? '').localeCompare(a.event_date ?? ''))
+    .slice(0, 3)
 
   const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -36,11 +55,13 @@ function Home() {
     updateBabyPhoto.mutate({ babyId: baby.id, photo: file })
   }
 
+  if (!baby) return null
+
   return (
     <Wrapper>
       <PhotoWrapper>
         {photoUrl ? (
-          <PhotoImage src={photoUrl} alt={baby?.name ?? 'Foto do bebê'} />
+          <PhotoImage src={photoUrl} alt={baby.name} />
         ) : (
           <PhotoPlaceholder>
             {updateBabyPhoto.isPending ? 'Enviando...' : 'Adicionar foto'}
@@ -49,11 +70,37 @@ function Home() {
         <input type="file" accept="image/*" onChange={handlePhotoChange} />
       </PhotoWrapper>
 
-      <p>{baby?.name}</p>
+      <InfoCard>
+        <BabyName>{baby.nickname || baby.name}</BabyName>
+        <AgeText>{calculateBabyAge(baby.birth_date)}</AgeText>
+        <MilestonesCount>
+          {registeredMilestones.length} de {milestones.length} marcos
+          registrados
+        </MilestonesCount>
+      </InfoCard>
 
-      <Button type="button" onClick={handleLogout}>
-        Sair
-      </Button>
+      {nextMilestone && (
+        <Card>
+          <CardTitle>Próximo marco</CardTitle>
+          <NextMilestoneRow>
+            <span>{nextMilestone.title}</span>
+            <Button type="button" onClick={() => navigate('/album')}>
+              Registrar
+            </Button>
+          </NextMilestoneRow>
+        </Card>
+      )}
+
+      {lastRegisteredMilestones.length > 0 && (
+        <Card>
+          <CardTitle>Últimos marcos registrados</CardTitle>
+          <MilestoneList>
+            {lastRegisteredMilestones.map((milestone) => (
+              <li key={milestone.id}>{milestone.title}</li>
+            ))}
+          </MilestoneList>
+        </Card>
+      )}
     </Wrapper>
   )
 }

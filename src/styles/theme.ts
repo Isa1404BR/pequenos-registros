@@ -3,6 +3,7 @@ export const theme = {
     primary: '#F4A9B8',
     secondary: '#A8D8C9',
     background: '#FFF8F3',
+    surface: '#FFFFFF',
     text: '#4A4038',
     error: '#E27D7D',
     success: '#8FBF9F',
@@ -25,6 +26,10 @@ export const theme = {
     xl: '24px',
     xxl: '32px',
     xxxl: '48px',
+  },
+  shadows: {
+    sm: '0 2px 8px rgba(74, 40, 33, 0.08)',
+    md: '0 8px 24px rgba(74, 40, 33, 0.12)',
   },
 } as const
 

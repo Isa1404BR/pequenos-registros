@@ -1,5 +1,16 @@
 import { supabase } from './supabase'
 
+export type Milestone = {
+  id: string
+  baby_id: string
+  title: string
+  description: string | null
+  event_date: string | null
+  is_hidden: boolean
+  created_at: string
+  updated_at: string
+}
+
 export const DEFAULT_MILESTONE_TITLES = [
   'Teste de gravidez',
   'Primeiro ultrassom',
@@ -22,4 +33,16 @@ export async function createDefaultMilestones(babyId: string) {
   const { error } = await supabase.from('baby_milestones').insert(rows)
 
   if (error) throw error
+}
+
+export async function getMilestones(babyId: string) {
+  const { data, error } = await supabase
+    .from('baby_milestones')
+    .select('*')
+    .eq('baby_id', babyId)
+    .eq('is_hidden', false)
+
+  if (error) throw error
+
+  return data as Milestone[]
 }
