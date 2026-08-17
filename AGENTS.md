@@ -84,8 +84,8 @@ Exemplo:
 
 screens/
 └── Login/
-    ├── index.tsx
-    └── styles.ts
+├── index.tsx
+└── styles.ts
 
 ### components
 

@@ -134,4 +134,3 @@ O Figma de fluxo já prevê alguns itens de tela que não fazem parte do MVP, ma
 
 - **Editar paleta de cores**: personalização visual (ver seção acima).
 - **Criar novo álbum**: suporte a múltiplos bebês/álbuns por conta. No MVP, cada conta possui um único bebê/álbum.
-
