@@ -79,6 +79,17 @@ Campos previstos:
 - created_at
 - updated_at
 
+## Storage
+
+Bucket único: `photos` (privado).
+
+Convenção de caminho dos arquivos:
+
+- `{baby_id}/profile/{arquivo}` — foto de perfil do bebê, referenciada em `babies.photo_url`. Não gera linha em `photos`, já que não está associada a um marco.
+- `{baby_id}/{milestone_id}/{arquivo}` — fotos de marcos, referenciadas em `photos.storage_path`.
+
+As policies de acesso do bucket usam apenas o primeiro segmento do caminho (`baby_id`) para autorizar leitura/escrita, então ambos os casos são cobertos pelas mesmas regras — sem necessidade de buckets ou policies separados.
+
 ## Segurança
 
 Usuários devem conseguir acessar apenas os dados aos quais possuem permissão.

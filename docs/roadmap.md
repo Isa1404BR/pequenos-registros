@@ -18,12 +18,12 @@
 
 ## Fase 2 — Banco
 
-- [ ] Modelar entidades (`profiles`, `babies`, `baby_milestones`, `photos`)
-- [ ] Criar migrations
-- [ ] Criar tabelas
-- [ ] Configurar relacionamentos
-- [ ] Configurar RLS (dono: leitura/escrita; `shared_with`: leitura)
-- [ ] Configurar Storage (bucket de fotos)
+- [x] Modelar entidades (`profiles`, `babies`, `baby_milestones`, `photos`)
+- [x] Criar migrations
+- [x] Criar tabelas
+- [x] Configurar relacionamentos
+- [x] Configurar RLS (dono: leitura/escrita; `shared_with`: leitura)
+- [x] Configurar Storage (bucket de fotos)
 
 ## Fase 3 — Autenticação
 
