@@ -9,6 +9,7 @@ import Home from '../screens/Home'
 import Album from '../screens/Album'
 import Familia from '../screens/Familia'
 import Configuracoes from '../screens/Configuracoes'
+import EditarMarcos from '../screens/EditarMarcos'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RequireBaby } from './RequireBaby'
 import { AppLayout } from './AppLayout'
@@ -30,6 +31,7 @@ export function AppRoutes() {
             <Route path="/album" element={<Album />} />
             <Route path="/familia" element={<Familia />} />
             <Route path="/configuracoes" element={<Configuracoes />} />
+            <Route path="/configuracoes/marcos" element={<EditarMarcos />} />
           </Route>
         </Route>
       </Route>

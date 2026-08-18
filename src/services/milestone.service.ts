@@ -46,3 +46,33 @@ export async function getMilestones(babyId: string) {
 
   return data as Milestone[]
 }
+
+export async function getAllMilestones(babyId: string) {
+  const { data, error } = await supabase
+    .from('baby_milestones')
+    .select('*')
+    .eq('baby_id', babyId)
+    .order('created_at', { ascending: true })
+
+  if (error) throw error
+
+  return data as Milestone[]
+}
+
+export async function updateMilestoneVisibility(id: string, isHidden: boolean) {
+  const { error } = await supabase
+    .from('baby_milestones')
+    .update({ is_hidden: isHidden })
+    .eq('id', id)
+
+  if (error) throw error
+}
+
+export async function createMilestones(babyId: string, titles: string[]) {
+  if (titles.length === 0) return
+
+  const rows = titles.map((title) => ({ baby_id: babyId, title }))
+  const { error } = await supabase.from('baby_milestones').insert(rows)
+
+  if (error) throw error
+}
