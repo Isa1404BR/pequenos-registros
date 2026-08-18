@@ -3,7 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createMilestones,
   getAllMilestones,
+  getMilestoneById,
   getMilestones,
+  updateMilestone,
   updateMilestoneVisibility,
 } from '../services/milestone.service'
 
@@ -20,6 +22,36 @@ export function useAllMilestones(babyId: string | undefined) {
     queryKey: ['all-milestones', babyId],
     queryFn: () => getAllMilestones(babyId as string),
     enabled: !!babyId,
+  })
+}
+
+export function useMilestone(id: string | undefined) {
+  return useQuery({
+    queryKey: ['milestone', id],
+    queryFn: () => getMilestoneById(id as string),
+    enabled: !!id,
+  })
+}
+
+type UpdateMilestoneInput = {
+  id: string
+  babyId: string
+  title: string
+  description: string | null
+  eventDate: string
+}
+
+export function useUpdateMilestone() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, title, description, eventDate }: UpdateMilestoneInput) =>
+      updateMilestone({ id, title, description, eventDate }),
+    onSuccess: (milestone, { babyId }) => {
+      queryClient.setQueryData(['milestone', milestone.id], milestone)
+      queryClient.invalidateQueries({ queryKey: ['milestones', babyId] })
+      queryClient.invalidateQueries({ queryKey: ['all-milestones', babyId] })
+    },
   })
 }
 

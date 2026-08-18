@@ -84,7 +84,10 @@ function Home() {
           <CardTitle>Próximo marco</CardTitle>
           <NextMilestoneRow>
             <span>{nextMilestone.title}</span>
-            <Button type="button" onClick={() => navigate('/album')}>
+            <Button
+              type="button"
+              onClick={() => navigate(`/album/marcos/${nextMilestone.id}`)}
+            >
               Registrar
             </Button>
           </NextMilestoneRow>

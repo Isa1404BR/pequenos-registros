@@ -76,3 +76,40 @@ export async function createMilestones(babyId: string, titles: string[]) {
 
   if (error) throw error
 }
+
+export async function getMilestoneById(id: string) {
+  const { data, error } = await supabase
+    .from('baby_milestones')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error) throw error
+
+  return data as Milestone
+}
+
+type UpdateMilestoneParams = {
+  id: string
+  title: string
+  description: string | null
+  eventDate: string
+}
+
+export async function updateMilestone({
+  id,
+  title,
+  description,
+  eventDate,
+}: UpdateMilestoneParams) {
+  const { data, error } = await supabase
+    .from('baby_milestones')
+    .update({ title, description, event_date: eventDate })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+
+  return data as Milestone
+}
