@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { parseIsoDate } from '../../utils/formatDate'
 import {
   CalendarGrid,
   CalendarHeader,
@@ -27,13 +28,6 @@ const MONTH_LABELS = [
   'Novembro',
   'Dezembro',
 ]
-
-function parseIsoDate(value: string) {
-  if (!value) return null
-
-  const [year, month, day] = value.split('-').map(Number)
-  return new Date(year, month - 1, day)
-}
 
 function toIsoDate(date: Date) {
   const year = date.getFullYear()

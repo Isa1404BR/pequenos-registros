@@ -4,6 +4,7 @@ import {
   deleteMilestonePhoto,
   getMilestonePhotos,
   getPhotoSignedUrl,
+  getPhotosByMilestoneIds,
   uploadMilestonePhoto,
   type Photo,
 } from '../services/photo.service'
@@ -26,6 +27,34 @@ export function useMilestonePhotos(milestoneId: string | undefined) {
       return withUrls as MilestonePhoto[]
     },
     enabled: !!milestoneId,
+  })
+}
+
+export function useAlbumPhotos(milestoneIds: string[]) {
+  const key = [...milestoneIds].sort().join(',')
+
+  return useQuery({
+    queryKey: ['album-photos', key],
+    queryFn: async () => {
+      const photos = await getPhotosByMilestoneIds(milestoneIds)
+
+      const withUrls = await Promise.all(
+        photos.map(async (photo) => ({
+          ...photo,
+          url: await getPhotoSignedUrl(photo.storage_path),
+        })),
+      )
+
+      const photosByMilestone = new Map<string, MilestonePhoto[]>()
+      withUrls.forEach((photo) => {
+        const current = photosByMilestone.get(photo.milestone_id) ?? []
+        current.push(photo)
+        photosByMilestone.set(photo.milestone_id, current)
+      })
+
+      return photosByMilestone
+    },
+    enabled: milestoneIds.length > 0,
   })
 }
 

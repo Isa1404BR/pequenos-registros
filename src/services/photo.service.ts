@@ -45,6 +45,20 @@ export async function uploadMilestonePhoto(
   return data as Photo
 }
 
+export async function getPhotosByMilestoneIds(milestoneIds: string[]) {
+  if (milestoneIds.length === 0) return []
+
+  const { data, error } = await supabase
+    .from('photos')
+    .select('*')
+    .in('milestone_id', milestoneIds)
+    .order('created_at', { ascending: true })
+
+  if (error) throw error
+
+  return data as Photo[]
+}
+
 export async function deleteMilestonePhoto(photo: Photo) {
   const { error: storageError } = await supabase.storage
     .from('photos')

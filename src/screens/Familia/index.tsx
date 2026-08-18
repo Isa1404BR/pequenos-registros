@@ -1,5 +1,5 @@
 function Familia() {
-  return <div>Família</div>
+  return <div>Em construção...</div>
 }
 
 export default Familia
