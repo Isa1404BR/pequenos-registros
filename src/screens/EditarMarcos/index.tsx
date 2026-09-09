@@ -72,6 +72,8 @@ function EditarMarcos() {
         {milestones.map((milestone) => {
           const checked = overrides[milestone.id] ?? !milestone.is_hidden
 
+          if (!checked && !(milestone.id in overrides)) return null
+
           return (
             <MilestoneRow
               key={milestone.id}
