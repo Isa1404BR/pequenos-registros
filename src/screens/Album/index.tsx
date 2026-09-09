@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { VideoPlayer } from '../../components/VideoPlayer'
 import { useAuth } from '../../hooks/useAuth'
 import { useBaby } from '../../hooks/useBaby'
 import { useMilestones } from '../../hooks/useMilestones'
@@ -18,7 +19,6 @@ import {
   MilestoneTitle,
   Photo,
   PhotoList,
-  Video,
   ShareButton,
   ShareFeedback,
   TitleRow,
@@ -137,12 +137,10 @@ function Album() {
                   <PhotoList>
                     {photos.map((photo) =>
                       photo.media_type === 'video' ? (
-                        <Video
+                        <VideoPlayer
                           key={photo.id}
                           src={photo.url}
                           poster={photo.posterUrl ?? undefined}
-                          controls
-                          preload="none"
                         />
                       ) : (
                         <Photo key={photo.id} src={photo.url} alt={milestone.title} />

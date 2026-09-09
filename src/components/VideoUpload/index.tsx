@@ -30,7 +30,7 @@ export type VideoUploadItem = {
 
 type VideoUploadProps = {
   video: VideoUploadItem | null
-  onAdd: (file: File, poster: Blob) => void
+  onAdd: (file: File, poster: Blob | null) => void
   onRemove: () => void
   onTagsChange: (tags: string[]) => void
   availableTags?: string[]
@@ -58,8 +58,8 @@ export function VideoUpload({
 
     if (!file) return
 
-    if (file.type !== 'video/mp4') {
-      setError('Envie um vídeo no formato .mp4.')
+    if (!file.type.startsWith('video/')) {
+      setError('Envie um arquivo de vídeo.')
       return
     }
 
@@ -70,17 +70,23 @@ export function VideoUpload({
 
     setIsProcessing(true)
     try {
-      const { duration } = await readVideoMetadata(file)
+      let poster: Blob | null = null
 
-      if (!Number.isFinite(duration) || duration > MAX_VIDEO_DURATION + 0.5) {
-        setError(`O vídeo deve ter no máximo ${MAX_VIDEO_DURATION} segundos.`)
-        return
+      try {
+        const { duration } = await readVideoMetadata(file)
+
+        if (Number.isFinite(duration) && duration > MAX_VIDEO_DURATION + 0.5) {
+          setError(`O vídeo deve ter no máximo ${MAX_VIDEO_DURATION} segundos.`)
+          return
+        }
+
+        poster = await captureVideoPoster(file)
+      } catch {
+        // Este navegador não decodifica o formato; ainda assim permitimos o
+        // envio (sem miniatura) e mostramos um aviso na hora de exibir.
       }
 
-      const poster = await captureVideoPoster(file)
       onAdd(file, poster)
-    } catch {
-      setError('Não foi possível processar o vídeo. Tente outro arquivo.')
     } finally {
       setIsProcessing(false)
     }
@@ -112,7 +118,7 @@ export function VideoUpload({
   return (
     <Wrapper>
       <HelperText>
-        Você pode adicionar 1 vídeo .mp4, de até {MAX_VIDEO_DURATION} segundos e{' '}
+        Você pode adicionar 1 vídeo, de até {MAX_VIDEO_DURATION} segundos e{' '}
         {MAX_SIZE_MB} MB.
       </HelperText>
 
@@ -174,7 +180,7 @@ export function VideoUpload({
           <UploadHint>{isProcessing ? 'Processando...' : 'Adicionar vídeo'}</UploadHint>
           <input
             type="file"
-            accept="video/mp4"
+            accept="video/*"
             onChange={handleFileChange}
             disabled={disabled || isProcessing}
           />

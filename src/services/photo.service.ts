@@ -54,12 +54,12 @@ export async function uploadMilestoneVideo(
   babyId: string,
   milestoneId: string,
   file: File,
-  poster: Blob,
+  poster: Blob | null,
   tags: string[] = [],
 ) {
   const baseDir = `${babyId}/${milestoneId}/${crypto.randomUUID()}`
   const videoPath = `${baseDir}-${file.name}`
-  const posterPath = `${baseDir}-poster.jpg`
+  const posterPath = poster ? `${baseDir}-poster.jpg` : null
 
   const { error: videoError } = await supabase.storage
     .from('photos')
@@ -67,11 +67,13 @@ export async function uploadMilestoneVideo(
 
   if (videoError) throw videoError
 
-  const { error: posterError } = await supabase.storage
-    .from('photos')
-    .upload(posterPath, poster, { contentType: 'image/jpeg' })
+  if (poster && posterPath) {
+    const { error: posterError } = await supabase.storage
+      .from('photos')
+      .upload(posterPath, poster, { contentType: 'image/jpeg' })
 
-  if (posterError) throw posterError
+    if (posterError) throw posterError
+  }
 
   const { data, error } = await supabase
     .from('photos')

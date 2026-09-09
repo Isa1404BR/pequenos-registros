@@ -83,7 +83,7 @@ type UploadMilestoneVideoInput = {
   babyId: string
   milestoneId: string
   file: File
-  poster: Blob
+  poster: Blob | null
   tags?: string[]
 }
 

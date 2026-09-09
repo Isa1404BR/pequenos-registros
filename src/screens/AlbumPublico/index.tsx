@@ -1,6 +1,7 @@
 import { useMemo, useState, type KeyboardEvent } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { VideoPlayer } from '../../components/VideoPlayer'
 import type { MilestonePhoto } from '../../hooks/usePhotos'
 import { usePublicAlbumPhotos, usePublicBaby, usePublicMilestones } from '../../hooks/usePublicAlbum'
 import { getPublicPhotoDownloadUrl } from '../../services/publicAlbum.service'
@@ -24,7 +25,6 @@ import {
   TagChip,
   TagChips,
   Title,
-  Video,
   Wrapper,
 } from './styles'
 
@@ -63,7 +63,7 @@ function PublicMedia({ photo, alt }: { photo: MilestonePhoto; alt: string }) {
   return (
     <PhotoFigure>
       {photo.media_type === 'video' ? (
-        <Video src={photo.url} poster={photo.posterUrl ?? undefined} controls preload="none" />
+        <VideoPlayer src={photo.url} poster={photo.posterUrl ?? undefined} />
       ) : (
         <Photo src={photo.url} alt={alt} />
       )}

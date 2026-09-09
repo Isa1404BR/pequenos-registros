@@ -32,7 +32,7 @@ type NewPhoto = {
 
 type NewVideo = {
   file: File
-  poster: Blob
+  poster: Blob | null
   previewUrl: string
   tags: string[]
 }
@@ -129,7 +129,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
     ])
   }
 
-  const handleAddVideo = (file: File, poster: Blob) => {
+  const handleAddVideo = (file: File, poster: Blob | null) => {
     setNewVideo({ file, poster, previewUrl: URL.createObjectURL(file), tags: [] })
   }
 

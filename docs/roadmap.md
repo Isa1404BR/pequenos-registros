@@ -47,7 +47,7 @@
 - [x] Editar registro
 - [x] Adicionar fotos
 - [x] Remover fotos
-- [x] Adicionar/remover vídeo do marco (.mp4, ≤ 60s, ≤ 20 MB)
+- [x] Adicionar/remover vídeo do marco (qualquer formato de vídeo, ≤ 60s, ≤ 20 MB; miniatura e limite de duração aplicados quando o navegador consegue decodificar; aviso "não é possível exibir" quando o navegador de quem visualiza não reproduz o formato)
 - [x] Tags em fotos e vídeos
 
 ## Fase 6 — Configurações
