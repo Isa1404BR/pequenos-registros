@@ -15,7 +15,7 @@ testes, segurança, tratamento de erros, monitoramento de bugs, observabilidade 
 
 ## Fase E1 — Código limpo e padronização
 
-- [ ] Ativar `strict: true` + `noUncheckedIndexedAccess` + `noImplicitOverride` no `tsconfig.app.json` e zerar erros
+- [x] Ativar `strict: true` + `noUncheckedIndexedAccess` + `noImplicitOverride` no `tsconfig.app.json` e zerar erros
 - [ ] Endurecer ESLint: `@typescript-eslint/no-explicit-any`, `no-floating-promises`, `exhaustive-deps` como erro, `import/order`
 - [ ] Adicionar Husky + lint-staged: `eslint --fix` + `prettier` + `tsc --noEmit` no pre-commit
 - [ ] Convenção de commits (Conventional Commits) + `commitlint`

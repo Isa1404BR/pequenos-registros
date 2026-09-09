@@ -2,6 +2,9 @@ export function parseIsoDate(value: string | null | undefined) {
   if (!value) return null
 
   const [year, month, day] = value.split('-').map(Number)
+  if (year === undefined || month === undefined || day === undefined) return null
+  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) return null
+
   return new Date(year, month - 1, day)
 }
 
