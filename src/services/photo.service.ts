@@ -1,17 +1,18 @@
 import type { Photo } from '../types'
 
+import { PHOTOS_BUCKET, createPhotoSignedUrl, run, runStorage } from './client'
 import { supabase } from './supabase'
 
-export async function getMilestonePhotos(milestoneId: string) {
-  const { data, error } = await supabase
-    .from('photos')
-    .select('*')
-    .eq('milestone_id', milestoneId)
-    .order('created_at', { ascending: true })
-
-  if (error) throw error
-
-  return data as Photo[]
+export function getMilestonePhotos(milestoneId: string) {
+  return run<Photo[]>(
+    supabase
+      .from('photos')
+      .select('*')
+      .eq('milestone_id', milestoneId)
+      .order('created_at', { ascending: true })
+      .returns<Photo[]>(),
+    'getMilestonePhotos',
+  )
 }
 
 export async function uploadMilestonePhoto(
@@ -22,21 +23,20 @@ export async function uploadMilestonePhoto(
 ) {
   const path = `${babyId}/${milestoneId}/${crypto.randomUUID()}-${file.name}`
 
-  const { error: uploadError } = await supabase.storage
-    .from('photos')
-    .upload(path, file)
+  await runStorage(
+    supabase.storage.from(PHOTOS_BUCKET).upload(path, file),
+    'uploadMilestonePhoto/storage',
+  )
 
-  if (uploadError) throw uploadError
-
-  const { data, error } = await supabase
-    .from('photos')
-    .insert({ milestone_id: milestoneId, storage_path: path, tags })
-    .select()
-    .single()
-
-  if (error) throw error
-
-  return data as Photo
+  return run<Photo>(
+    supabase
+      .from('photos')
+      .insert({ milestone_id: milestoneId, storage_path: path, tags })
+      .select()
+      .single()
+      .returns<Photo>(),
+    'uploadMilestonePhoto',
+  )
 }
 
 export async function uploadMilestoneVideo(
@@ -50,62 +50,64 @@ export async function uploadMilestoneVideo(
   const videoPath = `${baseDir}-${file.name}`
   const posterPath = poster ? `${baseDir}-poster.jpg` : null
 
-  const { error: videoError } = await supabase.storage
-    .from('photos')
-    .upload(videoPath, file, { contentType: file.type })
-
-  if (videoError) throw videoError
+  await runStorage(
+    supabase.storage
+      .from(PHOTOS_BUCKET)
+      .upload(videoPath, file, { contentType: file.type }),
+    'uploadMilestoneVideo/video',
+  )
 
   if (poster && posterPath) {
-    const { error: posterError } = await supabase.storage
-      .from('photos')
-      .upload(posterPath, poster, { contentType: 'image/jpeg' })
-
-    if (posterError) throw posterError
+    await runStorage(
+      supabase.storage
+        .from(PHOTOS_BUCKET)
+        .upload(posterPath, poster, { contentType: 'image/jpeg' }),
+      'uploadMilestoneVideo/poster',
+    )
   }
 
-  const { data, error } = await supabase
-    .from('photos')
-    .insert({
-      milestone_id: milestoneId,
-      storage_path: videoPath,
-      poster_path: posterPath,
-      media_type: 'video',
-      tags,
-    })
-    .select()
-    .single()
-
-  if (error) throw error
-
-  return data as Photo
+  return run<Photo>(
+    supabase
+      .from('photos')
+      .insert({
+        milestone_id: milestoneId,
+        storage_path: videoPath,
+        poster_path: posterPath,
+        media_type: 'video',
+        tags,
+      })
+      .select()
+      .single()
+      .returns<Photo>(),
+    'uploadMilestoneVideo',
+  )
 }
 
-export async function updatePhotoTags(photoId: string, tags: string[]) {
-  const { data, error } = await supabase
-    .from('photos')
-    .update({ tags })
-    .eq('id', photoId)
-    .select()
-    .single()
-
-  if (error) throw error
-
-  return data as Photo
+export function updatePhotoTags(photoId: string, tags: string[]) {
+  return run<Photo>(
+    supabase
+      .from('photos')
+      .update({ tags })
+      .eq('id', photoId)
+      .select()
+      .single()
+      .returns<Photo>(),
+    'updatePhotoTags',
+  )
 }
 
 export async function getBabyTags(babyId: string) {
-  const { data, error } = await supabase
-    .from('photos')
-    .select('tags, baby_milestones!inner(baby_id)')
-    .eq('baby_milestones.baby_id', babyId)
-
-  if (error) throw error
+  const rows = await run<{ tags: string[] }[]>(
+    supabase
+      .from('photos')
+      .select('tags, baby_milestones!inner(baby_id)')
+      .eq('baby_milestones.baby_id', babyId)
+      .returns<{ tags: string[] }[]>(),
+    'getBabyTags',
+  )
 
   const tags = new Set<string>()
-  ;(data as { tags: string[] }[]).forEach((row) => {
-    row.tags.forEach((tag) => tags.add(tag))
-  })
+  rows.forEach((row) => row.tags.forEach((tag) => tags.add(tag)))
 
   return [...tags].sort((a, b) => a.localeCompare(b))
 }
@@ -113,38 +115,32 @@ export async function getBabyTags(babyId: string) {
 export async function getPhotosByMilestoneIds(milestoneIds: string[]) {
   if (milestoneIds.length === 0) return []
 
-  const { data, error } = await supabase
-    .from('photos')
-    .select('*')
-    .in('milestone_id', milestoneIds)
-    .order('created_at', { ascending: true })
-
-  if (error) throw error
-
-  return data as Photo[]
+  return run<Photo[]>(
+    supabase
+      .from('photos')
+      .select('*')
+      .in('milestone_id', milestoneIds)
+      .order('created_at', { ascending: true })
+      .returns<Photo[]>(),
+    'getPhotosByMilestoneIds',
+  )
 }
 
 export async function deleteMilestonePhoto(photo: Photo) {
   const paths = [photo.storage_path]
   if (photo.poster_path) paths.push(photo.poster_path)
 
-  const { error: storageError } = await supabase.storage
-    .from('photos')
-    .remove(paths)
+  await runStorage(
+    supabase.storage.from(PHOTOS_BUCKET).remove(paths),
+    'deleteMilestonePhoto/storage',
+  )
 
-  if (storageError) throw storageError
-
-  const { error } = await supabase.from('photos').delete().eq('id', photo.id)
-
-  if (error) throw error
+  await run(
+    supabase.from('photos').delete().eq('id', photo.id),
+    'deleteMilestonePhoto',
+  )
 }
 
-export async function getPhotoSignedUrl(path: string) {
-  const { data, error } = await supabase.storage
-    .from('photos')
-    .createSignedUrl(path, 60 * 60)
-
-  if (error) throw error
-
-  return data.signedUrl
+export function getPhotoSignedUrl(path: string) {
+  return createPhotoSignedUrl(path)
 }

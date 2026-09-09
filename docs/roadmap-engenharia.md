@@ -20,7 +20,7 @@ testes, segurança, tratamento de erros, monitoramento de bugs, observabilidade 
 - [x] Adicionar Husky + lint-staged: `eslint --fix` + `prettier` + `tsc -b` no pre-commit
 - [x] Definir camadas e proibir atalhos: screen → hook → service → supabase (nunca screen chamando supabase direto). Documentado em `architecture.md` e validado com `@typescript-eslint/no-restricted-imports`
 - [x] Centralizar tipos de domínio em `src/types/` e derivar tipos do schema do Supabase (`database.types.ts` + `npm run db:types`; cliente tipado com `createClient<Database>`)
-- [ ] Eliminar duplicação em services (wrapper único de `supabase` com tratamento de erro padronizado)
+- [x] Eliminar duplicação em services (`services/client.ts`: `run`/`runStorage`/`createPhotoSignedUrl` + `SupabaseServiceError`)
 - [ ] Padronizar barrel exports e nomes de arquivo
 
 ## Fase E2 — Testes

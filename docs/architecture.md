@@ -73,6 +73,12 @@ services/
 
 As telas não devem realizar chamadas ao Supabase diretamente.
 
+Os services de dados não repetem o padrão `{ data, error }` do Supabase: passam por
+`services/client.ts`, que expõe `run()` (queries PostgREST / `rpc`), `runStorage()`
+(uploads/remoções) e `createPhotoSignedUrl()`. Todo erro sai como
+`SupabaseServiceError` (com o nome da operação na mensagem). Constantes como o nome do
+bucket (`PHOTOS_BUCKET`) e o TTL das URLs assinadas ficam nesse arquivo.
+
 ## Fronteiras entre camadas
 
 O fluxo de dependência é sempre em um sentido:

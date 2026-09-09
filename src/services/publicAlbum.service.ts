@@ -1,58 +1,39 @@
 import type { Baby, Milestone, Photo } from '../types'
 
+import { createPhotoSignedUrl, run } from './client'
 import { supabase } from './supabase'
 
 export async function getPublicBaby(babyId: string) {
-  const { data, error } = await supabase.rpc('get_public_baby', {
-    p_baby_id: babyId,
-  })
+  const rows = await run<Baby[]>(
+    supabase.rpc('get_public_baby', { p_baby_id: babyId }),
+    'getPublicBaby',
+  )
 
-  if (error) throw error
-
-  return (data?.[0] as Baby | undefined) ?? null
+  return rows[0] ?? null
 }
 
-export async function getPublicMilestones(babyId: string) {
-  const { data, error } = await supabase.rpc('get_public_milestones', {
-    p_baby_id: babyId,
-  })
-
-  if (error) throw error
-
-  return (data ?? []) as Milestone[]
+export function getPublicMilestones(babyId: string) {
+  return run<Milestone[]>(
+    supabase.rpc('get_public_milestones', { p_baby_id: babyId }),
+    'getPublicMilestones',
+  )
 }
 
 export async function getPublicPhotos(milestoneIds: string[]) {
   if (milestoneIds.length === 0) return []
 
-  const { data, error } = await supabase.rpc('get_public_photos', {
-    p_milestone_ids: milestoneIds,
-  })
-
-  if (error) throw error
-
-  return (data ?? []) as Photo[]
+  return run<Photo[]>(
+    supabase
+      .rpc('get_public_photos', { p_milestone_ids: milestoneIds })
+      .returns<Photo[]>(),
+    'getPublicPhotos',
+  )
 }
 
-export async function getPublicPhotoUrl(path: string) {
-  const { data, error } = await supabase.storage
-    .from('photos')
-    .createSignedUrl(path, 60 * 60)
-
-  if (error) throw error
-
-  return data.signedUrl
+export function getPublicPhotoUrl(path: string) {
+  return createPhotoSignedUrl(path)
 }
 
-export async function getPublicPhotoDownloadUrl(
-  path: string,
-  filename: string,
-) {
-  const { data, error } = await supabase.storage
-    .from('photos')
-    .createSignedUrl(path, 60 * 60, { download: filename })
-
-  if (error) throw error
-
-  return data.signedUrl
+export function getPublicPhotoDownloadUrl(path: string, filename: string) {
+  return createPhotoSignedUrl(path, { download: filename })
 }
