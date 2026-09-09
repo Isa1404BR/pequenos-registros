@@ -2,9 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   deleteMilestonePhoto,
+  getBabyTags,
   getMilestonePhotos,
   getPhotoSignedUrl,
   getPhotosByMilestoneIds,
+  updatePhotoTags,
   uploadMilestonePhoto,
   type Photo,
 } from '../services/photo.service'
@@ -62,19 +64,51 @@ type UploadMilestonePhotoInput = {
   babyId: string
   milestoneId: string
   file: File
+  tags?: string[]
 }
 
 export function useUploadMilestonePhoto() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file }: UploadMilestonePhotoInput) =>
-      uploadMilestonePhoto(babyId, milestoneId, file),
-    onSuccess: (_photo, { milestoneId }) => {
+    mutationFn: ({ babyId, milestoneId, file, tags }: UploadMilestonePhotoInput) =>
+      uploadMilestonePhoto(babyId, milestoneId, file, tags),
+    onSuccess: (_photo, { milestoneId, babyId }) => {
       queryClient.invalidateQueries({
         queryKey: ['milestone-photos', milestoneId],
       })
+      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
     },
+  })
+}
+
+type UpdatePhotoTagsInput = {
+  photoId: string
+  tags: string[]
+  milestoneId: string
+  babyId: string
+}
+
+export function useUpdatePhotoTags() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ photoId, tags }: UpdatePhotoTagsInput) =>
+      updatePhotoTags(photoId, tags),
+    onSuccess: (_photo, { milestoneId, babyId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['milestone-photos', milestoneId],
+      })
+      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
+    },
+  })
+}
+
+export function useBabyTags(babyId: string | undefined) {
+  return useQuery({
+    queryKey: ['baby-tags', babyId],
+    queryFn: () => getBabyTags(babyId as string),
+    enabled: !!babyId,
   })
 }
 

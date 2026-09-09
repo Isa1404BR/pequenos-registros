@@ -25,6 +25,7 @@ export async function uploadMilestonePhoto(
   babyId: string,
   milestoneId: string,
   file: File,
+  tags: string[] = [],
 ) {
   const path = `${babyId}/${milestoneId}/${crypto.randomUUID()}-${file.name}`
 
@@ -36,13 +37,42 @@ export async function uploadMilestonePhoto(
 
   const { data, error } = await supabase
     .from('photos')
-    .insert({ milestone_id: milestoneId, storage_path: path })
+    .insert({ milestone_id: milestoneId, storage_path: path, tags })
     .select()
     .single()
 
   if (error) throw error
 
   return data as Photo
+}
+
+export async function updatePhotoTags(photoId: string, tags: string[]) {
+  const { data, error } = await supabase
+    .from('photos')
+    .update({ tags })
+    .eq('id', photoId)
+    .select()
+    .single()
+
+  if (error) throw error
+
+  return data as Photo
+}
+
+export async function getBabyTags(babyId: string) {
+  const { data, error } = await supabase
+    .from('photos')
+    .select('tags, baby_milestones!inner(baby_id)')
+    .eq('baby_milestones.baby_id', babyId)
+
+  if (error) throw error
+
+  const tags = new Set<string>()
+  ;(data as { tags: string[] }[]).forEach((row) => {
+    row.tags.forEach((tag) => tags.add(tag))
+  })
+
+  return [...tags].sort((a, b) => a.localeCompare(b))
 }
 
 export async function getPhotosByMilestoneIds(milestoneIds: string[]) {
