@@ -118,6 +118,20 @@ O usuário poderá compartilhar seu álbum com outras pessoas.
 
 A implementação detalhada do compartilhamento será definida posteriormente.
 
+### Busca por tags na aba pública
+
+Na aba pública do álbum há um campo de pesquisa, acima dos marcos, que
+permite filtrar as mídias (fotos e vídeos) por tag (com autocomplete das
+tags existentes no álbum).
+
+- Sem nenhuma tag selecionada: o álbum é exibido normalmente, agrupado por
+  marco.
+- Com uma ou mais tags selecionadas: os marcos deixam de ser exibidos e as
+  fotos que possuem **qualquer uma** das tags selecionadas aparecem em uma
+  grade única.
+
+Toda foto da aba pública tem uma opção de baixar o arquivo original.
+
 ## Personalização
 
 A personalização visual será implementada futuramente.

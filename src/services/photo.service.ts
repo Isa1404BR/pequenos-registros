@@ -55,6 +55,7 @@ export async function uploadMilestoneVideo(
   milestoneId: string,
   file: File,
   poster: Blob,
+  tags: string[] = [],
 ) {
   const baseDir = `${babyId}/${milestoneId}/${crypto.randomUUID()}`
   const videoPath = `${baseDir}-${file.name}`
@@ -79,6 +80,7 @@ export async function uploadMilestoneVideo(
       storage_path: videoPath,
       poster_path: posterPath,
       media_type: 'video',
+      tags,
     })
     .select()
     .single()

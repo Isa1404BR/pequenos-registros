@@ -84,18 +84,20 @@ type UploadMilestoneVideoInput = {
   milestoneId: string
   file: File
   poster: Blob
+  tags?: string[]
 }
 
 export function useUploadMilestoneVideo() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file, poster }: UploadMilestoneVideoInput) =>
-      uploadMilestoneVideo(babyId, milestoneId, file, poster),
-    onSuccess: (_photo, { milestoneId }) => {
+    mutationFn: ({ babyId, milestoneId, file, poster, tags }: UploadMilestoneVideoInput) =>
+      uploadMilestoneVideo(babyId, milestoneId, file, poster, tags),
+    onSuccess: (_photo, { milestoneId, babyId }) => {
       queryClient.invalidateQueries({
         queryKey: ['milestone-photos', milestoneId],
       })
+      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
     },
   })
 }

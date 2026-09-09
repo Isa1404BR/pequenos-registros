@@ -85,3 +85,50 @@ export const UploadHint = styled.span`
   font-size: 0.75rem;
   color: ${({ theme }) => theme.colors.text}99;
 `
+
+export const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.xs};
+`
+
+export const Tag = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px ${({ theme }) => theme.spacing.xs};
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 0.75rem;
+`
+
+export const RemoveTagButton = styled.button`
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`
+
+export const TagInput = styled.input`
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.background};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  padding: 4px ${({ theme }) => theme.spacing.xs};
+  font-size: 0.75rem;
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`

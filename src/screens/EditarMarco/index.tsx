@@ -34,6 +34,7 @@ type NewVideo = {
   file: File
   poster: Blob
   previewUrl: string
+  tags: string[]
 }
 
 function EditarMarco() {
@@ -112,9 +113,13 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
   ]
 
   const videoItem = newVideo
-    ? { previewUrl: newVideo.previewUrl }
+    ? { previewUrl: newVideo.previewUrl, tags: newVideo.tags }
     : keptExistingVideo
-      ? { previewUrl: keptExistingVideo.url, posterUrl: keptExistingVideo.posterUrl }
+      ? {
+          previewUrl: keptExistingVideo.url,
+          posterUrl: keptExistingVideo.posterUrl,
+          tags: tagOverrides[keptExistingVideo.id] ?? keptExistingVideo.tags,
+        }
       : null
 
   const handleAddPhoto = (file: File) => {
@@ -125,7 +130,15 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
   }
 
   const handleAddVideo = (file: File, poster: Blob) => {
-    setNewVideo({ file, poster, previewUrl: URL.createObjectURL(file) })
+    setNewVideo({ file, poster, previewUrl: URL.createObjectURL(file), tags: [] })
+  }
+
+  const handleVideoTagsChange = (tags: string[]) => {
+    if (newVideo) {
+      setNewVideo((prev) => (prev ? { ...prev, tags } : prev))
+    } else if (keptExistingVideo) {
+      setTagOverrides((prev) => ({ ...prev, [keptExistingVideo.id]: tags }))
+    }
   }
 
   const handleRemoveVideo = () => {
@@ -214,6 +227,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
                 milestoneId: milestone.id,
                 file: newVideo.file,
                 poster: newVideo.poster,
+                tags: newVideo.tags,
               }),
             ]
           : []),
@@ -271,6 +285,8 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
           video={videoItem}
           onAdd={handleAddVideo}
           onRemove={handleRemoveVideo}
+          onTagsChange={handleVideoTagsChange}
+          availableTags={availableTags}
           disabled={isSaving}
         />
 

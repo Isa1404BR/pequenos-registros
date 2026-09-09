@@ -48,6 +48,7 @@
 - [x] Adicionar fotos
 - [x] Remover fotos
 - [x] Adicionar/remover vídeo do marco (.mp4, ≤ 60s, ≤ 20 MB)
+- [x] Tags em fotos e vídeos
 
 ## Fase 6 — Configurações
 
@@ -61,6 +62,8 @@
 - [ ] Adicionar/remover e-mail em `babies.shared_with`
 - [ ] Acesso somente leitura ao álbum para e-mails compartilhados
 - [ ] Ocultar ações de edição para usuários convidados
+- [x] Busca de fotos por tag na aba pública (autocomplete; sem tag = álbum completo, com tag(s) = grade única com as fotos que têm qualquer uma das tags)
+- [x] Botão de baixar em toda foto da aba pública
 
 ## Fase 8 — Qualidade
 

@@ -44,3 +44,13 @@ export async function getPublicPhotoUrl(path: string) {
 
   return data.signedUrl
 }
+
+export async function getPublicPhotoDownloadUrl(path: string, filename: string) {
+  const { data, error } = await supabase.storage
+    .from('photos')
+    .createSignedUrl(path, 60 * 60, { download: filename })
+
+  if (error) throw error
+
+  return data.signedUrl
+}
