@@ -20,6 +20,12 @@ export const Title = styled.h1`
   font-size: 1.25rem;
 `
 
+export const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+`
+
 export const ShareButton = styled.button`
   border: none;
   background: transparent;
@@ -32,6 +38,27 @@ export const ShareButton = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.colors.surface};
+  }
+`
+
+export const ViewButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: ${({ theme }) => theme.radii.pill};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.surface};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `
 

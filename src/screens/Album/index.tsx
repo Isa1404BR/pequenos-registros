@@ -7,6 +7,7 @@ import { useMilestones } from '../../hooks/useMilestones'
 import { useAlbumPhotos } from '../../hooks/usePhotos'
 import { formatDisplayDate } from '../../utils/formatDate'
 import {
+  Actions,
   Card,
   CardBody,
   CardHeaderRow,
@@ -22,8 +23,22 @@ import {
   ShareFeedback,
   TitleRow,
   Title,
+  ViewButton,
   Wrapper,
 } from './styles'
+
+function EyeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path
+        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  )
+}
 
 function Album() {
   const navigate = useNavigate()
@@ -70,13 +85,25 @@ function Album() {
     <Wrapper>
       <TitleRow>
         <Title>Registros de {baby.nickname || baby.name}</Title>
-        <ShareButton
-          type="button"
-          onClick={handleShareAlbum}
-          aria-label="Compartilhar álbum"
-        >
-          🔗
-        </ShareButton>
+        <Actions>
+          {user && (
+            <ViewButton
+              type="button"
+              onClick={() => navigate(`/album/publico/${baby.id}`)}
+              aria-label="Visualizar álbum"
+              title="Visualizar como quem recebe o link"
+            >
+              <EyeIcon />
+            </ViewButton>
+          )}
+          <ShareButton
+            type="button"
+            onClick={handleShareAlbum}
+            aria-label="Compartilhar álbum"
+          >
+            🔗
+          </ShareButton>
+        </Actions>
       </TitleRow>
 
       {shareFeedback && <ShareFeedback>{shareFeedback}</ShareFeedback>}
