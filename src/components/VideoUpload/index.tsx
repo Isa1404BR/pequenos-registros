@@ -6,6 +6,7 @@ import {
   captureVideoPoster,
   readVideoMetadata,
 } from '../../utils/videoMedia'
+
 import {
   ErrorText,
   HelperText,

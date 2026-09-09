@@ -9,6 +9,7 @@ import {
   type Baby,
 } from '../services/baby.service'
 import { createDefaultMilestones } from '../services/milestone.service'
+
 import { useAuth } from './useAuth'
 
 export function useBaby() {

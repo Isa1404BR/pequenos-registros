@@ -70,12 +70,13 @@ export function useUploadMilestonePhoto() {
   return useMutation({
     mutationFn: ({ babyId, milestoneId, file, tags }: UploadMilestonePhotoInput) =>
       uploadMilestonePhoto(babyId, milestoneId, file, tags),
-    onSuccess: (_photo, { milestoneId, babyId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['milestone-photos', milestoneId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
-    },
+    onSuccess: (_photo, { milestoneId, babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['milestone-photos', milestoneId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] }),
+      ]),
   })
 }
 
@@ -93,12 +94,13 @@ export function useUploadMilestoneVideo() {
   return useMutation({
     mutationFn: ({ babyId, milestoneId, file, poster, tags }: UploadMilestoneVideoInput) =>
       uploadMilestoneVideo(babyId, milestoneId, file, poster, tags),
-    onSuccess: (_photo, { milestoneId, babyId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['milestone-photos', milestoneId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
-    },
+    onSuccess: (_photo, { milestoneId, babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['milestone-photos', milestoneId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] }),
+      ]),
   })
 }
 
@@ -115,12 +117,13 @@ export function useUpdatePhotoTags() {
   return useMutation({
     mutationFn: ({ photoId, tags }: UpdatePhotoTagsInput) =>
       updatePhotoTags(photoId, tags),
-    onSuccess: (_photo, { milestoneId, babyId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['milestone-photos', milestoneId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
-    },
+    onSuccess: (_photo, { milestoneId, babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['milestone-photos', milestoneId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] }),
+      ]),
   })
 }
 
@@ -137,10 +140,9 @@ export function useDeleteMilestonePhoto() {
 
   return useMutation({
     mutationFn: (photo: Photo) => deleteMilestonePhoto(photo),
-    onSuccess: (_data, photo) => {
+    onSuccess: (_data, photo) =>
       queryClient.invalidateQueries({
         queryKey: ['milestone-photos', photo.milestone_id],
-      })
-    },
+      }),
   })
 }

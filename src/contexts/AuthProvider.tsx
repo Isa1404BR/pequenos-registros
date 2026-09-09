@@ -1,7 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
+import { useEffect, useState, type ReactNode } from 'react'
 
 import { supabase } from '../services/supabase'
+
 import { AuthContext } from './AuthContext'
 
 type AuthProviderProps = {
@@ -22,7 +23,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(false)
     }
 
-    initializeAuth()
+    void initializeAuth()
 
     const {
       data: { subscription },

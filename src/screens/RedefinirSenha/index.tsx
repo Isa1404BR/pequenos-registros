@@ -2,10 +2,11 @@ import { useState, type SubmitEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AuthLayout } from '../../components/AuthLayout'
-import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { FormError } from '../../components/FormError'
+import { Input } from '../../components/Input'
 import { updatePassword } from '../../services/auth.service'
+
 import { Form } from './styles'
 
 function RedefinirSenha() {
@@ -29,7 +30,7 @@ function RedefinirSenha() {
 
     try {
       await updatePassword(password)
-      navigate('/login')
+      void navigate('/login')
     } catch {
       setError(
         'Não foi possível redefinir sua senha. O link pode ter expirado.',

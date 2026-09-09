@@ -49,8 +49,10 @@ export function useUpdateMilestone() {
       updateMilestone({ id, title, description, eventDate }),
     onSuccess: (milestone, { babyId }) => {
       queryClient.setQueryData(['milestone', milestone.id], milestone)
-      queryClient.invalidateQueries({ queryKey: ['milestones', babyId] })
-      queryClient.invalidateQueries({ queryKey: ['all-milestones', babyId] })
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['milestones', babyId] }),
+        queryClient.invalidateQueries({ queryKey: ['all-milestones', babyId] }),
+      ])
     },
   })
 }
@@ -73,9 +75,10 @@ export function useSaveMilestones() {
       )
       await createMilestones(babyId, newTitles)
     },
-    onSuccess: (_data, { babyId }) => {
-      queryClient.invalidateQueries({ queryKey: ['milestones', babyId] })
-      queryClient.invalidateQueries({ queryKey: ['all-milestones', babyId] })
-    },
+    onSuccess: (_data, { babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['milestones', babyId] }),
+        queryClient.invalidateQueries({ queryKey: ['all-milestones', babyId] }),
+      ]),
   })
 }

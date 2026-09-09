@@ -6,10 +6,8 @@ import { DatePicker } from '../../components/DatePicker'
 import { FormError } from '../../components/FormError'
 import { Input } from '../../components/Input'
 import { PhotoUpload, type PhotoUploadItem } from '../../components/PhotoUpload'
-import { VideoUpload } from '../../components/VideoUpload'
 import { Textarea } from '../../components/Textarea'
-import type { Baby } from '../../services/baby.service'
-import type { Milestone } from '../../services/milestone.service'
+import { VideoUpload } from '../../components/VideoUpload'
 import { useBaby } from '../../hooks/useBaby'
 import { useMilestone, useUpdateMilestone } from '../../hooks/useMilestones'
 import {
@@ -21,6 +19,9 @@ import {
   useUploadMilestoneVideo,
   type MilestonePhoto,
 } from '../../hooks/usePhotos'
+import type { Baby } from '../../services/baby.service'
+import type { Milestone } from '../../services/milestone.service'
+
 import { FieldRow, Form, Title, Wrapper } from './styles'
 
 type NewPhoto = {
@@ -243,7 +244,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
           ),
       ])
 
-      navigate('/album')
+      void navigate('/album')
     } catch {
       setError('Não foi possível salvar o marco. Tente novamente.')
     }

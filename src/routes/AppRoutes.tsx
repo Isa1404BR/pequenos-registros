@@ -1,20 +1,21 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import Login from '../screens/Login'
-import Cadastro from '../screens/Cadastro'
-import EsqueciSenha from '../screens/EsqueciSenha'
-import RedefinirSenha from '../screens/RedefinirSenha'
-import CadastroBebe from '../screens/CadastroBebe'
-import Home from '../screens/Home'
 import Album from '../screens/Album'
-import Familia from '../screens/Familia'
-import Configuracoes from '../screens/Configuracoes'
-import EditarMarcos from '../screens/EditarMarcos'
-import EditarMarco from '../screens/EditarMarco'
 import AlbumPublico from '../screens/AlbumPublico'
+import Cadastro from '../screens/Cadastro'
+import CadastroBebe from '../screens/CadastroBebe'
+import Configuracoes from '../screens/Configuracoes'
+import EditarMarco from '../screens/EditarMarco'
+import EditarMarcos from '../screens/EditarMarcos'
+import EsqueciSenha from '../screens/EsqueciSenha'
+import Familia from '../screens/Familia'
+import Home from '../screens/Home'
+import Login from '../screens/Login'
+import RedefinirSenha from '../screens/RedefinirSenha'
+
+import { AppLayout } from './AppLayout'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RequireBaby } from './RequireBaby'
-import { AppLayout } from './AppLayout'
 
 export function AppRoutes() {
   return (

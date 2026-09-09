@@ -14,7 +14,7 @@ function Configuracoes() {
 
   const handleOptionClick = (option: (typeof options)[number]) => {
     if (option.route) {
-      navigate(option.route)
+      void navigate(option.route)
       return
     }
 
