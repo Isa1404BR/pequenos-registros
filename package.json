@@ -8,7 +8,18 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "typecheck": "tsc -b"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,cjs,mjs,json,css,md,html,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
@@ -30,6 +41,8 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.0",
     "prettier": "^3.9.6",
     "supabase": "^2.114.0",
     "typescript": "~6.0.2",
