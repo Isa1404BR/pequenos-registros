@@ -2,14 +2,25 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   deleteMilestonePhoto,
+  getBabyTags,
   getMilestonePhotos,
   getPhotoSignedUrl,
   getPhotosByMilestoneIds,
+  updatePhotoTags,
   uploadMilestonePhoto,
+  uploadMilestoneVideo,
   type Photo,
 } from '../services/photo.service'
 
-export type MilestonePhoto = Photo & { url: string }
+export type MilestonePhoto = Photo & { url: string; posterUrl: string | null }
+
+export async function withMediaUrls(photo: Photo): Promise<MilestonePhoto> {
+  return {
+    ...photo,
+    url: await getPhotoSignedUrl(photo.storage_path),
+    posterUrl: photo.poster_path ? await getPhotoSignedUrl(photo.poster_path) : null,
+  }
+}
 
 export function useMilestonePhotos(milestoneId: string | undefined) {
   return useQuery({
@@ -17,14 +28,7 @@ export function useMilestonePhotos(milestoneId: string | undefined) {
     queryFn: async () => {
       const photos = await getMilestonePhotos(milestoneId as string)
 
-      const withUrls = await Promise.all(
-        photos.map(async (photo) => ({
-          ...photo,
-          url: await getPhotoSignedUrl(photo.storage_path),
-        })),
-      )
-
-      return withUrls as MilestonePhoto[]
+      return Promise.all(photos.map(withMediaUrls))
     },
     enabled: !!milestoneId,
   })
@@ -38,12 +42,7 @@ export function useAlbumPhotos(milestoneIds: string[]) {
     queryFn: async () => {
       const photos = await getPhotosByMilestoneIds(milestoneIds)
 
-      const withUrls = await Promise.all(
-        photos.map(async (photo) => ({
-          ...photo,
-          url: await getPhotoSignedUrl(photo.storage_path),
-        })),
-      )
+      const withUrls = await Promise.all(photos.map(withMediaUrls))
 
       const photosByMilestone = new Map<string, MilestonePhoto[]>()
       withUrls.forEach((photo) => {
@@ -62,19 +61,74 @@ type UploadMilestonePhotoInput = {
   babyId: string
   milestoneId: string
   file: File
+  tags?: string[]
 }
 
 export function useUploadMilestonePhoto() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file }: UploadMilestonePhotoInput) =>
-      uploadMilestonePhoto(babyId, milestoneId, file),
-    onSuccess: (_photo, { milestoneId }) => {
+    mutationFn: ({ babyId, milestoneId, file, tags }: UploadMilestonePhotoInput) =>
+      uploadMilestonePhoto(babyId, milestoneId, file, tags),
+    onSuccess: (_photo, { milestoneId, babyId }) => {
       queryClient.invalidateQueries({
         queryKey: ['milestone-photos', milestoneId],
       })
+      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
     },
+  })
+}
+
+type UploadMilestoneVideoInput = {
+  babyId: string
+  milestoneId: string
+  file: File
+  poster: Blob
+  tags?: string[]
+}
+
+export function useUploadMilestoneVideo() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ babyId, milestoneId, file, poster, tags }: UploadMilestoneVideoInput) =>
+      uploadMilestoneVideo(babyId, milestoneId, file, poster, tags),
+    onSuccess: (_photo, { milestoneId, babyId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['milestone-photos', milestoneId],
+      })
+      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
+    },
+  })
+}
+
+type UpdatePhotoTagsInput = {
+  photoId: string
+  tags: string[]
+  milestoneId: string
+  babyId: string
+}
+
+export function useUpdatePhotoTags() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ photoId, tags }: UpdatePhotoTagsInput) =>
+      updatePhotoTags(photoId, tags),
+    onSuccess: (_photo, { milestoneId, babyId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['milestone-photos', milestoneId],
+      })
+      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
+    },
+  })
+}
+
+export function useBabyTags(babyId: string | undefined) {
+  return useQuery({
+    queryKey: ['baby-tags', babyId],
+    queryFn: () => getBabyTags(babyId as string),
+    enabled: !!babyId,
   })
 }
 

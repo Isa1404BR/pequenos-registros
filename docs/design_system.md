@@ -109,4 +109,10 @@ Componentes iniciais:
 
 ### UploadImage — upload múltiplo de fotos em um marco
 
-Um marco pode ter de 1 a 3 fotos. A tela de edição/registro de marco começa com um único slot de upload; um botão "adicionar outra foto" permite incluir até mais 2 slots, de forma dinâmica (não são exibidos os 3 slots de uma vez).
+Um marco pode ter de 1 a 10 fotos. A tela de edição/registro de marco começa com um único slot de upload; um botão "adicionar outra foto" permite incluir novos slots de forma dinâmica (não são exibidos todos de uma vez).
+
+Cada foto pode ter no máximo 10 MB no momento da seleção. Antes do envio, a imagem é redimensionada no navegador para no máximo 2000 px no maior lado e recomprimida em WebP (com fallback para JPEG) a 80% de qualidade — ver `src/utils/compressImage.ts`.
+
+### VideoUpload — 1 vídeo por marco
+
+Abaixo do upload de fotos, um bloco permite adicionar **um** vídeo `.mp4` por marco, de até **60 segundos** e **20 MB**. O vídeo não é recomprimido; o navegador só valida duração/tamanho e gera uma miniatura JPEG (primeiro quadro) para a grade do álbum — ver `src/utils/videoMedia.ts`. No álbum, o vídeo é exibido com `controls` e `preload="none"` (mostra só a miniatura até o usuário dar play).

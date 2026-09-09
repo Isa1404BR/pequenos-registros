@@ -11,6 +11,7 @@ import Familia from '../screens/Familia'
 import Configuracoes from '../screens/Configuracoes'
 import EditarMarcos from '../screens/EditarMarcos'
 import EditarMarco from '../screens/EditarMarco'
+import AlbumPublico from '../screens/AlbumPublico'
 import { ProtectedRoute } from './ProtectedRoute'
 import { RequireBaby } from './RequireBaby'
 import { AppLayout } from './AppLayout'
@@ -22,6 +23,7 @@ export function AppRoutes() {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/esqueci-senha" element={<EsqueciSenha />} />
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+      <Route path="/album/publico/:babyId" element={<AlbumPublico />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/cadastro-bebe" element={<CadastroBebe />} />

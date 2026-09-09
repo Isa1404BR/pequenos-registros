@@ -9,8 +9,63 @@ export const Wrapper = styled.div`
   margin: 0 auto;
 `
 
+export const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.sm};
+`
+
 export const Title = styled.h1`
   font-size: 1.25rem;
+`
+
+export const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+`
+
+export const ShareButton = styled.button`
+  border: none;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: ${({ theme }) => theme.radii.pill};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.surface};
+  }
+`
+
+export const ViewButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text};
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.xs};
+  border-radius: ${({ theme }) => theme.radii.pill};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.surface};
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`
+
+export const ShareFeedback = styled.p`
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.75;
 `
 
 export const EmptyState = styled.p`
@@ -84,4 +139,11 @@ export const Photo = styled.img`
   max-height: 420px;
   object-fit: cover;
   border-radius: ${({ theme }) => theme.radii.md};
+`
+
+export const Video = styled.video`
+  width: 100%;
+  max-height: 420px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: #000;
 `

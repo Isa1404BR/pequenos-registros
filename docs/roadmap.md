@@ -36,17 +36,19 @@
 
 ## Fase 4 — Onboarding
 
-- [ ] Cadastro do bebê
-- [ ] Criação dos marcos padrão
+- [x] Cadastro do bebê
+- [x] Criação dos marcos padrão
 
 ## Fase 5 — Álbum
 
-- [ ] Home
-- [ ] Visualização dos marcos (ordenados por `event_date`)
-- [ ] Adicionar registro (descrição + data + 1 a 3 fotos)
-- [ ] Editar registro
-- [ ] Adicionar fotos
-- [ ] Remover fotos
+- [x] Home
+- [x] Visualização dos marcos (ordenados por `event_date`)
+- [x] Adicionar registro (descrição + data + 1 a 10 fotos + até 1 vídeo)
+- [x] Editar registro
+- [x] Adicionar fotos
+- [x] Remover fotos
+- [x] Adicionar/remover vídeo do marco (.mp4, ≤ 60s, ≤ 20 MB)
+- [x] Tags em fotos e vídeos
 
 ## Fase 6 — Configurações
 
@@ -60,6 +62,8 @@
 - [ ] Adicionar/remover e-mail em `babies.shared_with`
 - [ ] Acesso somente leitura ao álbum para e-mails compartilhados
 - [ ] Ocultar ações de edição para usuários convidados
+- [x] Busca de fotos por tag na aba pública (autocomplete; sem tag = álbum completo, com tag(s) = grade única com as fotos que têm qualquer uma das tags)
+- [x] Botão de baixar em toda foto da aba pública
 
 ## Fase 8 — Qualidade
 
@@ -71,7 +75,7 @@
 
 ## Fase 9 — Deploy
 
-- [ ] Configurar Vercel
-- [ ] Configurar variáveis de ambiente
+- [x] Configurar Vercel
+- [x] Configurar variáveis de ambiente
 - [ ] Configurar CI/CD
 - [ ] Deploy de produção
