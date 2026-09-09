@@ -1,7 +1,7 @@
 import type { Session } from '@supabase/supabase-js'
 import { useEffect, useState, type ReactNode } from 'react'
 
-import { supabase } from '../services/supabase'
+import { getSession, onAuthStateChange } from '../services/auth.service'
 
 import { AuthContext } from './AuthContext'
 
@@ -15,19 +15,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-
-      setSession(session)
+      setSession(await getSession())
       setLoading(false)
     }
 
     void initializeAuth()
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const subscription = onAuthStateChange((session) => {
       setSession(session)
     })
 

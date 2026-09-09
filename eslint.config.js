@@ -6,6 +6,25 @@ import tseslint from 'typescript-eslint'
 import importX from 'eslint-plugin-import-x'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
+/**
+ * Fronteiras de arquitetura (ver docs/architecture.md):
+ * screen/component -> hook -> service -> supabase
+ * Só a camada `src/services/` pode falar com o Supabase.
+ */
+const supabaseClientPattern = {
+  group: ['**/services/supabase', '@supabase/supabase-js'],
+  message:
+    'Só a camada src/services/ pode importar o cliente do Supabase. Crie/usar um service.',
+  allowTypeImports: true,
+}
+
+const dataServicePattern = {
+  group: ['**/services/*.service', '!**/services/auth.service'],
+  message:
+    'Telas e componentes acessam dados via hooks (src/hooks/), não services diretamente.',
+  allowTypeImports: true,
+}
+
 export default defineConfig([
   globalIgnores(['dist']),
   {
@@ -35,6 +54,10 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       'react-hooks/exhaustive-deps': 'error',
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        { patterns: [supabaseClientPattern] },
+      ],
       'import-x/order': [
         'error',
         {
@@ -50,6 +73,21 @@ export default defineConfig([
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+    },
+  },
+  {
+    files: ['src/screens/**/*.{ts,tsx}', 'src/components/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        { patterns: [supabaseClientPattern, dataServicePattern] },
+      ],
+    },
+  },
+  {
+    files: ['src/services/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
 ])

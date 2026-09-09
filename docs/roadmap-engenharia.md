@@ -18,8 +18,7 @@ testes, segurança, tratamento de erros, monitoramento de bugs, observabilidade 
 - [x] Ativar `strict: true` + `noUncheckedIndexedAccess` + `noImplicitOverride` no `tsconfig.app.json` e zerar erros
 - [x] Endurecer ESLint: `@typescript-eslint/no-explicit-any`, `no-floating-promises`, `exhaustive-deps` como erro, `import-x/order`
 - [x] Adicionar Husky + lint-staged: `eslint --fix` + `prettier` + `tsc -b` no pre-commit
-- [ ] Convenção de commits (Conventional Commits) + `commitlint`
-- [ ] Definir camadas e proibir atalhos: screen → hook → service → supabase (nunca screen chamando supabase direto). Documentar e validar com `eslint-plugin-boundaries` ou `no-restricted-imports`
+- [x] Definir camadas e proibir atalhos: screen → hook → service → supabase (nunca screen chamando supabase direto). Documentado em `architecture.md` e validado com `@typescript-eslint/no-restricted-imports`
 - [ ] Centralizar tipos de domínio em `src/types/` e derivar tipos do schema do Supabase (`supabase gen types typescript`)
 - [ ] Eliminar duplicação em services (wrapper único de `supabase` com tratamento de erro padronizado)
 - [ ] Padronizar barrel exports e nomes de arquivo

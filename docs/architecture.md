@@ -73,6 +73,25 @@ services/
 
 As telas não devem realizar chamadas ao Supabase diretamente.
 
+## Fronteiras entre camadas
+
+O fluxo de dependência é sempre em um sentido:
+
+```
+screen / component  →  hook  →  service  →  supabase
+```
+
+Regras (validadas por ESLint via `@typescript-eslint/no-restricted-imports`, ver `eslint.config.js`):
+
+- **Só `src/services/`** pode importar o cliente do Supabase (`services/supabase` ou
+  `@supabase/supabase-js`). Qualquer outra camada é barrada pelo lint.
+- **Telas e componentes** não importam `*.service` em runtime — acessam dados por hooks
+  (`src/hooks/`). Exceções permitidas:
+  - `import type` de um service (tipos ainda não centralizados em `src/types/`);
+  - `auth.service` (ações imperativas de autenticação, sem dados de query).
+- **Contexts** (ex.: `AuthProvider`) podem consumir services diretamente — compõem estado
+  global, como um hook.
+
 ## Hooks
 
 Hooks devem encapsular lógica reutilizável.

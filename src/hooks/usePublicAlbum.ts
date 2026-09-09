@@ -3,11 +3,14 @@ import { useQuery } from '@tanstack/react-query'
 import {
   getPublicBaby,
   getPublicMilestones,
+  getPublicPhotoDownloadUrl,
   getPublicPhotoUrl,
   getPublicPhotos,
 } from '../services/publicAlbum.service'
 
 import type { MilestonePhoto } from './usePhotos'
+
+export { getPublicPhotoDownloadUrl }
 
 export function usePublicBaby(babyId: string | undefined) {
   return useQuery({

@@ -3,8 +3,12 @@ import { useParams } from 'react-router-dom'
 
 import { VideoPlayer } from '../../components/VideoPlayer'
 import type { MilestonePhoto } from '../../hooks/usePhotos'
-import { usePublicAlbumPhotos, usePublicBaby, usePublicMilestones } from '../../hooks/usePublicAlbum'
-import { getPublicPhotoDownloadUrl } from '../../services/publicAlbum.service'
+import {
+  getPublicPhotoDownloadUrl,
+  usePublicAlbumPhotos,
+  usePublicBaby,
+  usePublicMilestones,
+} from '../../hooks/usePublicAlbum'
 import { formatDisplayDate } from '../../utils/formatDate'
 
 import {
@@ -50,7 +54,13 @@ async function downloadPhoto(photo: MilestonePhoto) {
 
 function DownloadIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
       <path
         d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"
         strokeLinecap="round"
@@ -87,7 +97,9 @@ function AlbumPublico() {
 
   const registeredMilestones = [...milestones]
     .filter((milestone) => milestone.event_date)
-    .sort((a, b) => (a.event_date as string).localeCompare(b.event_date as string))
+    .sort((a, b) =>
+      (a.event_date as string).localeCompare(b.event_date as string),
+    )
 
   const milestoneIds = registeredMilestones.map((milestone) => milestone.id)
   const { data: photosByMilestone } = usePublicAlbumPhotos(milestoneIds)
@@ -135,7 +147,12 @@ function AlbumPublico() {
   )
 
   if (isLoadingBaby) return null
-  if (!baby) return <Wrapper><EmptyState>Álbum não encontrado.</EmptyState></Wrapper>
+  if (!baby)
+    return (
+      <Wrapper>
+        <EmptyState>Álbum não encontrado.</EmptyState>
+      </Wrapper>
+    )
 
   const isFiltering = selectedTags.length > 0
 
@@ -187,7 +204,11 @@ function AlbumPublico() {
         ) : (
           <FilteredGrid>
             {filteredPhotos.map((photo) => (
-              <PublicMedia key={photo.id} photo={photo} alt={selectedTags.join(', ')} />
+              <PublicMedia
+                key={photo.id}
+                photo={photo}
+                alt={selectedTags.join(', ')}
+              />
             ))}
           </FilteredGrid>
         )
@@ -204,7 +225,9 @@ function AlbumPublico() {
               <Card key={milestone.id}>
                 <CardHeaderRow>
                   <MilestoneTitle>{milestone.title}</MilestoneTitle>
-                  <MilestoneDate>{formatDisplayDate(milestone.event_date)}</MilestoneDate>
+                  <MilestoneDate>
+                    {formatDisplayDate(milestone.event_date)}
+                  </MilestoneDate>
                 </CardHeaderRow>
 
                 {(milestone.description || photos.length > 0) && (
@@ -212,7 +235,11 @@ function AlbumPublico() {
                     {photos.length > 0 && (
                       <PhotoList>
                         {photos.map((photo) => (
-                          <PublicMedia key={photo.id} photo={photo} alt={milestone.title} />
+                          <PublicMedia
+                            key={photo.id}
+                            photo={photo}
+                            alt={milestone.title}
+                          />
                         ))}
                       </PhotoList>
                     )}
