@@ -41,13 +41,13 @@
 
 ## Fase 5 — Álbum
 
-- [ ] Home
-- [ ] Visualização dos marcos (ordenados por `event_date`)
-- [ ] Adicionar registro (descrição + data + 1 a 10 fotos + até 1 vídeo)
-- [ ] Editar registro
-- [ ] Adicionar fotos
-- [ ] Remover fotos
-- [ ] Adicionar/remover vídeo do marco (.mp4, ≤ 60s, ≤ 20 MB)
+- [x] Home
+- [x] Visualização dos marcos (ordenados por `event_date`)
+- [x] Adicionar registro (descrição + data + 1 a 10 fotos + até 1 vídeo)
+- [x] Editar registro
+- [x] Adicionar fotos
+- [x] Remover fotos
+- [x] Adicionar/remover vídeo do marco (.mp4, ≤ 60s, ≤ 20 MB)
 
 ## Fase 6 — Configurações
 
@@ -72,7 +72,7 @@
 
 ## Fase 9 — Deploy
 
-- [ ] Configurar Vercel
-- [ ] Configurar variáveis de ambiente
+- [x] Configurar Vercel
+- [x] Configurar variáveis de ambiente
 - [ ] Configurar CI/CD
 - [ ] Deploy de produção
