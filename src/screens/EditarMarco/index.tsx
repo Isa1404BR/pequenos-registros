@@ -37,7 +37,7 @@ type NewVideo = {
   tags: string[]
 }
 
-function EditarMarco() {
+export function EditarMarco() {
   const { id } = useParams<{ id: string }>()
 
   const { data: baby } = useBaby()
@@ -325,5 +325,3 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
     </Wrapper>
   )
 }
-
-export default EditarMarco

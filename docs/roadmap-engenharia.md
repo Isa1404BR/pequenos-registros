@@ -21,7 +21,7 @@ testes, segurança, tratamento de erros, monitoramento de bugs, observabilidade 
 - [x] Definir camadas e proibir atalhos: screen → hook → service → supabase (nunca screen chamando supabase direto). Documentado em `architecture.md` e validado com `@typescript-eslint/no-restricted-imports`
 - [x] Centralizar tipos de domínio em `src/types/` e derivar tipos do schema do Supabase (`database.types.ts` + `npm run db:types`; cliente tipado com `createClient<Database>`)
 - [x] Eliminar duplicação em services (`services/client.ts`: `run`/`runStorage`/`createPhotoSignedUrl` + `SupabaseServiceError`)
-- [ ] Padronizar barrel exports e nomes de arquivo
+- [x] Padronizar barrel exports e nomes de arquivo (export nomeado em todo lugar; convenções em `architecture.md`)
 
 ## Fase E2 — Testes
 

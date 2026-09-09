@@ -33,6 +33,24 @@ src/
 ├── types/
 └── utils/
 
+## Convenções de arquivo e export
+
+- **Export sempre nomeado.** Nada de `export default` — nem em screens, nem em
+  `App`. O nome do símbolo é o mesmo em toda importação.
+- **Entrada por pasta, sem barrel agregador.** `components/` e `screens/` usam
+  `PascalCase/index.tsx` (+ `styles.ts` quando há styled-components); a pasta é o
+  ponto de entrada (`import { Button } from '.../components/Button'`). Não existe
+  `components/index.ts` re-exportando tudo — isso prejudica tree-shaking e cria
+  risco de import circular.
+- **Nomes por camada:**
+  - `components/`, `screens/`: `PascalCase/` (pasta) + `index.tsx`
+  - `hooks/`: `camelCase.ts`, prefixo `use` (`useBaby.ts`)
+  - `services/`: `kebab.service.ts` para services de domínio; infra sem sufixo
+    (`client.ts`, `supabase.ts`)
+  - `utils/`: `camelCase.ts`
+  - `routes/`, `contexts/`: `PascalCase.tsx` / `PascalCase.ts`
+  - `types/`: `models.ts` (domínio) e `database.types.ts` (schema, regenerável)
+
 ## Screens
 
 Cada página principal da aplicação deve possuir sua própria pasta.

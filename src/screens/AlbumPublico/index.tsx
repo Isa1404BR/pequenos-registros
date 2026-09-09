@@ -90,7 +90,7 @@ function PublicMedia({ photo, alt }: { photo: MilestonePhoto; alt: string }) {
   )
 }
 
-function AlbumPublico() {
+export function AlbumPublico() {
   const { babyId } = useParams<{ babyId: string }>()
   const { data: baby, isLoading: isLoadingBaby } = usePublicBaby(babyId)
   const { data: milestones = [] } = usePublicMilestones(babyId)
@@ -256,5 +256,3 @@ function AlbumPublico() {
     </Wrapper>
   )
 }
-
-export default AlbumPublico

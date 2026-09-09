@@ -9,7 +9,7 @@ import { signIn } from '../../services/auth.service'
 
 import { Actions, ForgotPasswordLink, Form } from './styles'
 
-function Login() {
+export function Login() {
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -76,5 +76,3 @@ function Login() {
     </AuthLayout>
   )
 }
-
-export default Login

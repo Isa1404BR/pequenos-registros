@@ -28,7 +28,7 @@ import {
 
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024
 
-function Home() {
+export function Home() {
   const navigate = useNavigate()
   const { data: baby } = useBaby()
   const { data: photoUrl } = useBabyPhotoUrl(baby?.photo_url)
@@ -108,5 +108,3 @@ function Home() {
     </Wrapper>
   )
 }
-
-export default Home

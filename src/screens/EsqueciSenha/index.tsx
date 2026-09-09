@@ -8,7 +8,7 @@ import { resetPassword } from '../../services/auth.service'
 
 import { Form } from './styles'
 
-function EsqueciSenha() {
+export function EsqueciSenha() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [sent, setSent] = useState(false)
@@ -62,5 +62,3 @@ function EsqueciSenha() {
     </AuthLayout>
   )
 }
-
-export default EsqueciSenha

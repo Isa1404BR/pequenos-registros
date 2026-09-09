@@ -9,7 +9,7 @@ import { updatePassword } from '../../services/auth.service'
 
 import { Form } from './styles'
 
-function RedefinirSenha() {
+export function RedefinirSenha() {
   const navigate = useNavigate()
 
   const [password, setPassword] = useState('')
@@ -73,5 +73,3 @@ function RedefinirSenha() {
     </AuthLayout>
   )
 }
-
-export default RedefinirSenha

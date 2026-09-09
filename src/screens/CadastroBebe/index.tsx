@@ -9,7 +9,7 @@ import { useCreateBaby } from '../../hooks/useBaby'
 
 import { Form } from './styles'
 
-function CadastroBebe() {
+export function CadastroBebe() {
   const navigate = useNavigate()
   const createBaby = useCreateBaby()
 
@@ -66,5 +66,3 @@ function CadastroBebe() {
     </AuthLayout>
   )
 }
-
-export default CadastroBebe

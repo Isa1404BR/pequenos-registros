@@ -30,7 +30,13 @@ import {
 
 function EyeIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
       <path
         d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"
         strokeLinecap="round"
@@ -41,7 +47,7 @@ function EyeIcon() {
   )
 }
 
-function Album() {
+export function Album() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { data: baby } = useBaby()
@@ -75,7 +81,9 @@ function Album() {
 
   const registeredMilestones = [...milestones]
     .filter((milestone) => milestone.event_date)
-    .sort((a, b) => (a.event_date as string).localeCompare(b.event_date as string))
+    .sort((a, b) =>
+      (a.event_date as string).localeCompare(b.event_date as string),
+    )
 
   const milestoneIds = registeredMilestones.map((milestone) => milestone.id)
   const { data: photosByMilestone } = useAlbumPhotos(milestoneIds)
@@ -120,7 +128,9 @@ function Album() {
           <Card key={milestone.id}>
             <CardHeaderRow>
               <MilestoneTitle>{milestone.title}</MilestoneTitle>
-              <MilestoneDate>{formatDisplayDate(milestone.event_date)}</MilestoneDate>
+              <MilestoneDate>
+                {formatDisplayDate(milestone.event_date)}
+              </MilestoneDate>
               {user && (
                 <EditButton
                   type="button"
@@ -144,7 +154,11 @@ function Album() {
                           poster={photo.posterUrl ?? undefined}
                         />
                       ) : (
-                        <Photo key={photo.id} src={photo.url} alt={milestone.title} />
+                        <Photo
+                          key={photo.id}
+                          src={photo.url}
+                          alt={milestone.title}
+                        />
                       ),
                     )}
                   </PhotoList>
@@ -160,5 +174,3 @@ function Album() {
     </Wrapper>
   )
 }
-
-export default Album

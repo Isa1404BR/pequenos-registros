@@ -9,7 +9,7 @@ import { signUp } from '../../services/auth.service'
 
 import { Actions, Form } from './styles'
 
-function Cadastro() {
+export function Cadastro() {
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
@@ -111,5 +111,3 @@ function Cadastro() {
     </AuthLayout>
   )
 }
-
-export default Cadastro

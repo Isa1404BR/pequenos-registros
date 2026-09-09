@@ -16,7 +16,7 @@ import {
   Wrapper,
 } from './styles'
 
-function EditarMarcos() {
+export function EditarMarcos() {
   const navigate = useNavigate()
   const { data: baby } = useBaby()
   const { data: milestones } = useAllMilestones(baby?.id)
@@ -131,5 +131,3 @@ function EditarMarcos() {
     </Wrapper>
   )
 }
-
-export default EditarMarcos
