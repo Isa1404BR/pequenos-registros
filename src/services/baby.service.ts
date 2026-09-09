@@ -1,16 +1,6 @@
-import { supabase } from './supabase'
+import type { Baby } from '../types'
 
-export type Baby = {
-  id: string
-  user_id: string
-  name: string
-  nickname: string | null
-  birth_date: string
-  photo_url: string | null
-  shared_with: string[]
-  created_at: string
-  updated_at: string
-}
+import { supabase } from './supabase'
 
 export async function getBaby() {
   const { data, error } = await supabase

@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "prepare": "husky",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "db:types": "supabase gen types typescript --linked > src/types/database.types.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

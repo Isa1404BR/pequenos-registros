@@ -1,17 +1,6 @@
+import type { Photo } from '../types'
+
 import { supabase } from './supabase'
-
-export type MediaType = 'photo' | 'video'
-
-export type Photo = {
-  id: string
-  milestone_id: string
-  storage_path: string
-  media_type: MediaType
-  poster_path: string | null
-  tags: string[]
-  created_at: string
-  updated_at: string
-}
 
 export async function getMilestonePhotos(milestoneId: string) {
   const { data, error } = await supabase
@@ -139,7 +128,9 @@ export async function deleteMilestonePhoto(photo: Photo) {
   const paths = [photo.storage_path]
   if (photo.poster_path) paths.push(photo.poster_path)
 
-  const { error: storageError } = await supabase.storage.from('photos').remove(paths)
+  const { error: storageError } = await supabase.storage
+    .from('photos')
+    .remove(paths)
 
   if (storageError) throw storageError
 

@@ -9,8 +9,8 @@ import {
   updatePhotoTags,
   uploadMilestonePhoto,
   uploadMilestoneVideo,
-  type Photo,
 } from '../services/photo.service'
+import type { Photo } from '../types'
 
 export type MilestonePhoto = Photo & { url: string; posterUrl: string | null }
 
@@ -18,7 +18,9 @@ export async function withMediaUrls(photo: Photo): Promise<MilestonePhoto> {
   return {
     ...photo,
     url: await getPhotoSignedUrl(photo.storage_path),
-    posterUrl: photo.poster_path ? await getPhotoSignedUrl(photo.poster_path) : null,
+    posterUrl: photo.poster_path
+      ? await getPhotoSignedUrl(photo.poster_path)
+      : null,
   }
 }
 
@@ -68,7 +70,12 @@ export function useUploadMilestonePhoto() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file, tags }: UploadMilestonePhotoInput) =>
+    mutationFn: ({
+      babyId,
+      milestoneId,
+      file,
+      tags,
+    }: UploadMilestonePhotoInput) =>
       uploadMilestonePhoto(babyId, milestoneId, file, tags),
     onSuccess: (_photo, { milestoneId, babyId }) =>
       Promise.all([
@@ -92,7 +99,13 @@ export function useUploadMilestoneVideo() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file, poster, tags }: UploadMilestoneVideoInput) =>
+    mutationFn: ({
+      babyId,
+      milestoneId,
+      file,
+      poster,
+      tags,
+    }: UploadMilestoneVideoInput) =>
       uploadMilestoneVideo(babyId, milestoneId, file, poster, tags),
     onSuccess: (_photo, { milestoneId, babyId }) =>
       Promise.all([

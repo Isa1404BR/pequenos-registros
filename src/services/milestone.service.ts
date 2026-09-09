@@ -1,15 +1,6 @@
-import { supabase } from './supabase'
+import type { Milestone } from '../types'
 
-export type Milestone = {
-  id: string
-  baby_id: string
-  title: string
-  description: string | null
-  event_date: string | null
-  is_hidden: boolean
-  created_at: string
-  updated_at: string
-}
+import { supabase } from './supabase'
 
 export const DEFAULT_MILESTONE_TITLES = [
   'Teste de gravidez',

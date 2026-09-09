@@ -1,6 +1,5 @@
-import type { Baby } from './baby.service'
-import type { Milestone } from './milestone.service'
-import type { Photo } from './photo.service'
+import type { Baby, Milestone, Photo } from '../types'
+
 import { supabase } from './supabase'
 
 export async function getPublicBaby(babyId: string) {
@@ -45,7 +44,10 @@ export async function getPublicPhotoUrl(path: string) {
   return data.signedUrl
 }
 
-export async function getPublicPhotoDownloadUrl(path: string, filename: string) {
+export async function getPublicPhotoDownloadUrl(
+  path: string,
+  filename: string,
+) {
   const { data, error } = await supabase.storage
     .from('photos')
     .createSignedUrl(path, 60 * 60, { download: filename })

@@ -6,9 +6,9 @@ import {
   getBabyPhotoSignedUrl,
   updateBabyPhoto,
   uploadBabyPhoto,
-  type Baby,
 } from '../services/baby.service'
 import { createDefaultMilestones } from '../services/milestone.service'
+import type { Baby } from '../types'
 
 import { useAuth } from './useAuth'
 
