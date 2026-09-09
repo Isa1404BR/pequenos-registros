@@ -1,13 +1,14 @@
 import { useState, type SubmitEvent } from 'react'
 
 import { AuthLayout } from '../../components/AuthLayout'
-import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { FormError } from '../../components/FormError'
+import { Input } from '../../components/Input'
 import { resetPassword } from '../../services/auth.service'
+
 import { Form } from './styles'
 
-function EsqueciSenha() {
+export function EsqueciSenha() {
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [sent, setSent] = useState(false)
@@ -61,5 +62,3 @@ function EsqueciSenha() {
     </AuthLayout>
   )
 }
-
-export default EsqueciSenha

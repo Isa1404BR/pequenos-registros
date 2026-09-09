@@ -2,13 +2,14 @@ import { useState, type SubmitEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AuthLayout } from '../../components/AuthLayout'
-import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { FormError } from '../../components/FormError'
+import { Input } from '../../components/Input'
 import { signUp } from '../../services/auth.service'
+
 import { Actions, Form } from './styles'
 
-function Cadastro() {
+export function Cadastro() {
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
@@ -35,7 +36,7 @@ function Cadastro() {
       const { session } = await signUp({ name, email, password })
 
       if (session) {
-        navigate('/home')
+        void navigate('/home')
         return
       }
 
@@ -110,5 +111,3 @@ function Cadastro() {
     </AuthLayout>
   )
 }
-
-export default Cadastro

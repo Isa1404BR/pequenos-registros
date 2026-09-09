@@ -1,15 +1,7 @@
-import { supabase } from './supabase'
+import type { Milestone } from '../types'
 
-export type Milestone = {
-  id: string
-  baby_id: string
-  title: string
-  description: string | null
-  event_date: string | null
-  is_hidden: boolean
-  created_at: string
-  updated_at: string
-}
+import { run } from './client'
+import { supabase } from './supabase'
 
 export const DEFAULT_MILESTONE_TITLES = [
   'Teste de gravidez',
@@ -30,63 +22,57 @@ export async function createDefaultMilestones(babyId: string) {
     title,
   }))
 
-  const { error } = await supabase.from('baby_milestones').insert(rows)
-
-  if (error) throw error
+  await run(
+    supabase.from('baby_milestones').insert(rows),
+    'createDefaultMilestones',
+  )
 }
 
-export async function getMilestones(babyId: string) {
-  const { data, error } = await supabase
-    .from('baby_milestones')
-    .select('*')
-    .eq('baby_id', babyId)
-    .eq('is_hidden', false)
-
-  if (error) throw error
-
-  return data as Milestone[]
+export function getMilestones(babyId: string) {
+  return run<Milestone[]>(
+    supabase
+      .from('baby_milestones')
+      .select('*')
+      .eq('baby_id', babyId)
+      .eq('is_hidden', false),
+    'getMilestones',
+  )
 }
 
-export async function getAllMilestones(babyId: string) {
-  const { data, error } = await supabase
-    .from('baby_milestones')
-    .select('*')
-    .eq('baby_id', babyId)
-    .order('created_at', { ascending: true })
-
-  if (error) throw error
-
-  return data as Milestone[]
+export function getAllMilestones(babyId: string) {
+  return run<Milestone[]>(
+    supabase
+      .from('baby_milestones')
+      .select('*')
+      .eq('baby_id', babyId)
+      .order('created_at', { ascending: true }),
+    'getAllMilestones',
+  )
 }
 
 export async function updateMilestoneVisibility(id: string, isHidden: boolean) {
-  const { error } = await supabase
-    .from('baby_milestones')
-    .update({ is_hidden: isHidden })
-    .eq('id', id)
-
-  if (error) throw error
+  await run(
+    supabase
+      .from('baby_milestones')
+      .update({ is_hidden: isHidden })
+      .eq('id', id),
+    'updateMilestoneVisibility',
+  )
 }
 
 export async function createMilestones(babyId: string, titles: string[]) {
   if (titles.length === 0) return
 
   const rows = titles.map((title) => ({ baby_id: babyId, title }))
-  const { error } = await supabase.from('baby_milestones').insert(rows)
 
-  if (error) throw error
+  await run(supabase.from('baby_milestones').insert(rows), 'createMilestones')
 }
 
-export async function getMilestoneById(id: string) {
-  const { data, error } = await supabase
-    .from('baby_milestones')
-    .select('*')
-    .eq('id', id)
-    .single()
-
-  if (error) throw error
-
-  return data as Milestone
+export function getMilestoneById(id: string) {
+  return run<Milestone>(
+    supabase.from('baby_milestones').select('*').eq('id', id).single(),
+    'getMilestoneById',
+  )
 }
 
 type UpdateMilestoneParams = {
@@ -96,20 +82,19 @@ type UpdateMilestoneParams = {
   eventDate: string
 }
 
-export async function updateMilestone({
+export function updateMilestone({
   id,
   title,
   description,
   eventDate,
 }: UpdateMilestoneParams) {
-  const { data, error } = await supabase
-    .from('baby_milestones')
-    .update({ title, description, event_date: eventDate })
-    .eq('id', id)
-    .select()
-    .single()
-
-  if (error) throw error
-
-  return data as Milestone
+  return run<Milestone>(
+    supabase
+      .from('baby_milestones')
+      .update({ title, description, event_date: eventDate })
+      .eq('id', id)
+      .select()
+      .single(),
+    'updateMilestone',
+  )
 }

@@ -1,5 +1,5 @@
 import { DEFAULT_MILESTONE_TITLES } from '../services/milestone.service'
-import type { Milestone } from '../services/milestone.service'
+import type { Milestone } from '../types'
 
 function getDefaultOrder(title: string) {
   const index = DEFAULT_MILESTONE_TITLES.indexOf(title)

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { SideMenu } from '../SideMenu'
+
 import { Brand, MenuButton, Wrapper } from './styles'
 
 export function Header() {

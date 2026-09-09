@@ -6,10 +6,8 @@ import { DatePicker } from '../../components/DatePicker'
 import { FormError } from '../../components/FormError'
 import { Input } from '../../components/Input'
 import { PhotoUpload, type PhotoUploadItem } from '../../components/PhotoUpload'
-import { VideoUpload } from '../../components/VideoUpload'
 import { Textarea } from '../../components/Textarea'
-import type { Baby } from '../../services/baby.service'
-import type { Milestone } from '../../services/milestone.service'
+import { VideoUpload } from '../../components/VideoUpload'
 import { useBaby } from '../../hooks/useBaby'
 import { useMilestone, useUpdateMilestone } from '../../hooks/useMilestones'
 import {
@@ -21,6 +19,8 @@ import {
   useUploadMilestoneVideo,
   type MilestonePhoto,
 } from '../../hooks/usePhotos'
+import type { Baby, Milestone } from '../../types'
+
 import { FieldRow, Form, Title, Wrapper } from './styles'
 
 type NewPhoto = {
@@ -37,7 +37,7 @@ type NewVideo = {
   tags: string[]
 }
 
-function EditarMarco() {
+export function EditarMarco() {
   const { id } = useParams<{ id: string }>()
 
   const { data: baby } = useBaby()
@@ -47,7 +47,11 @@ function EditarMarco() {
   if (!baby || !milestone) return null
 
   return (
-    <MarcoForm baby={baby} milestone={milestone} existingPhotos={existingPhotos} />
+    <MarcoForm
+      baby={baby}
+      milestone={milestone}
+      existingPhotos={existingPhotos}
+    />
   )
 }
 
@@ -125,12 +129,22 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
   const handleAddPhoto = (file: File) => {
     setNewPhotos((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), file, previewUrl: URL.createObjectURL(file), tags: [] },
+      {
+        id: crypto.randomUUID(),
+        file,
+        previewUrl: URL.createObjectURL(file),
+        tags: [],
+      },
     ])
   }
 
   const handleAddVideo = (file: File, poster: Blob | null) => {
-    setNewVideo({ file, poster, previewUrl: URL.createObjectURL(file), tags: [] })
+    setNewVideo({
+      file,
+      poster,
+      previewUrl: URL.createObjectURL(file),
+      tags: [],
+    })
   }
 
   const handleVideoTagsChange = (tags: string[]) => {
@@ -162,7 +176,9 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
   const handleTagsChange = (photoId: string, tags: string[]) => {
     if (newPhotos.some((photo) => photo.id === photoId)) {
       setNewPhotos((prev) =>
-        prev.map((photo) => (photo.id === photoId ? { ...photo, tags } : photo)),
+        prev.map((photo) =>
+          photo.id === photoId ? { ...photo, tags } : photo,
+        ),
       )
     } else {
       setTagOverrides((prev) => ({ ...prev, [photoId]: tags }))
@@ -209,7 +225,9 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
 
       await Promise.all([
         ...removedPhotoIds
-          .map((photoId) => existingPhotos.find((photo) => photo.id === photoId))
+          .map((photoId) =>
+            existingPhotos.find((photo) => photo.id === photoId),
+          )
           .filter((photo): photo is MilestonePhoto => !!photo)
           .map((photo) => deletePhoto.mutateAsync(photo)),
         ...newPhotos.map((photo) =>
@@ -243,7 +261,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
           ),
       ])
 
-      navigate('/album')
+      void navigate('/album')
     } catch {
       setError('Não foi possível salvar o marco. Tente novamente.')
     }
@@ -307,5 +325,3 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
     </Wrapper>
   )
 }
-
-export default EditarMarco

@@ -110,3 +110,20 @@ Regras de acesso previstas para `babies`, `baby_milestones` e `photos`:
 Alterações no banco devem ser realizadas através de migrations versionadas no Git.
 
 Não realizar alterações estruturais diretamente no banco de produção sem uma migration correspondente.
+
+## Tipos no frontend
+
+O schema é refletido em `src/types/database.types.ts` (interface `Database`), e o
+cliente é tipado com `createClient<Database>()` em `src/services/supabase.ts`. Os tipos
+de domínio usados pela aplicação (`Baby`, `Milestone`, `Photo`, ...) ficam em
+`src/types/` e são **derivados** desse schema — não redeclarados.
+
+Regenerar após criar uma migration:
+
+```
+npm run db:types      # supabase gen types typescript --linked
+```
+
+Requer `supabase login` + `supabase link` (ou Docker, trocando `--linked` por
+`--local`). Enquanto o link não estiver configurado, `database.types.ts` é mantido
+em sincronia com o SQL manualmente.

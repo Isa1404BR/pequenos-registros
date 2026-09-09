@@ -2,13 +2,14 @@ import { useState, type SubmitEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AuthLayout } from '../../components/AuthLayout'
-import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { FormError } from '../../components/FormError'
+import { Input } from '../../components/Input'
 import { useCreateBaby } from '../../hooks/useBaby'
+
 import { Form } from './styles'
 
-function CadastroBebe() {
+export function CadastroBebe() {
   const navigate = useNavigate()
   const createBaby = useCreateBaby()
 
@@ -23,7 +24,7 @@ function CadastroBebe() {
 
     try {
       await createBaby.mutateAsync({ name, nickname, birthDate })
-      navigate('/home')
+      void navigate('/home')
     } catch {
       setError('Não foi possível cadastrar o bebê. Tente novamente.')
     }
@@ -65,5 +66,3 @@ function CadastroBebe() {
     </AuthLayout>
   )
 }
-
-export default CadastroBebe

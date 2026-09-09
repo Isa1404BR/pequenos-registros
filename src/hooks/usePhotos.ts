@@ -9,8 +9,8 @@ import {
   updatePhotoTags,
   uploadMilestonePhoto,
   uploadMilestoneVideo,
-  type Photo,
 } from '../services/photo.service'
+import type { Photo } from '../types'
 
 export type MilestonePhoto = Photo & { url: string; posterUrl: string | null }
 
@@ -18,7 +18,9 @@ export async function withMediaUrls(photo: Photo): Promise<MilestonePhoto> {
   return {
     ...photo,
     url: await getPhotoSignedUrl(photo.storage_path),
-    posterUrl: photo.poster_path ? await getPhotoSignedUrl(photo.poster_path) : null,
+    posterUrl: photo.poster_path
+      ? await getPhotoSignedUrl(photo.poster_path)
+      : null,
   }
 }
 
@@ -68,14 +70,20 @@ export function useUploadMilestonePhoto() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file, tags }: UploadMilestonePhotoInput) =>
+    mutationFn: ({
+      babyId,
+      milestoneId,
+      file,
+      tags,
+    }: UploadMilestonePhotoInput) =>
       uploadMilestonePhoto(babyId, milestoneId, file, tags),
-    onSuccess: (_photo, { milestoneId, babyId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['milestone-photos', milestoneId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
-    },
+    onSuccess: (_photo, { milestoneId, babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['milestone-photos', milestoneId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] }),
+      ]),
   })
 }
 
@@ -91,14 +99,21 @@ export function useUploadMilestoneVideo() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ babyId, milestoneId, file, poster, tags }: UploadMilestoneVideoInput) =>
+    mutationFn: ({
+      babyId,
+      milestoneId,
+      file,
+      poster,
+      tags,
+    }: UploadMilestoneVideoInput) =>
       uploadMilestoneVideo(babyId, milestoneId, file, poster, tags),
-    onSuccess: (_photo, { milestoneId, babyId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['milestone-photos', milestoneId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
-    },
+    onSuccess: (_photo, { milestoneId, babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['milestone-photos', milestoneId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] }),
+      ]),
   })
 }
 
@@ -115,12 +130,13 @@ export function useUpdatePhotoTags() {
   return useMutation({
     mutationFn: ({ photoId, tags }: UpdatePhotoTagsInput) =>
       updatePhotoTags(photoId, tags),
-    onSuccess: (_photo, { milestoneId, babyId }) => {
-      queryClient.invalidateQueries({
-        queryKey: ['milestone-photos', milestoneId],
-      })
-      queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
-    },
+    onSuccess: (_photo, { milestoneId, babyId }) =>
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['milestone-photos', milestoneId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] }),
+      ]),
   })
 }
 
@@ -137,10 +153,9 @@ export function useDeleteMilestonePhoto() {
 
   return useMutation({
     mutationFn: (photo: Photo) => deleteMilestonePhoto(photo),
-    onSuccess: (_data, photo) => {
+    onSuccess: (_data, photo) =>
       queryClient.invalidateQueries({
         queryKey: ['milestone-photos', photo.milestone_id],
-      })
-    },
+      }),
   })
 }

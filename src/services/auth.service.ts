@@ -1,3 +1,5 @@
+import type { Session } from '@supabase/supabase-js'
+
 import { supabase } from './supabase'
 
 type SignUpParams = {
@@ -54,4 +56,20 @@ export async function updatePassword(password: string) {
   const { error } = await supabase.auth.updateUser({ password })
 
   if (error) throw error
+}
+
+export async function getSession() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  return session
+}
+
+export function onAuthStateChange(callback: (session: Session | null) => void) {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((_event, session) => callback(session))
+
+  return subscription
 }

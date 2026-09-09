@@ -3,18 +3,22 @@ import { useNavigate } from 'react-router-dom'
 import { Card, OptionButton, OptionIcon, Wrapper } from './styles'
 
 const options = [
-  { label: 'Editar marcos', action: 'editar-marcos', route: '/configuracoes/marcos' },
+  {
+    label: 'Editar marcos',
+    action: 'editar-marcos',
+    route: '/configuracoes/marcos',
+  },
   { label: 'Editar paleta de cores', action: 'editar-paleta-de-cores' },
   { label: 'Editar senha/email', action: 'editar-senha-email' },
   { label: 'Criar novo álbum', action: 'criar-novo-album' },
 ]
 
-function Configuracoes() {
+export function Configuracoes() {
   const navigate = useNavigate()
 
   const handleOptionClick = (option: (typeof options)[number]) => {
     if (option.route) {
-      navigate(option.route)
+      void navigate(option.route)
       return
     }
 
@@ -38,5 +42,3 @@ function Configuracoes() {
     </Wrapper>
   )
 }
-
-export default Configuracoes

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { useBaby } from '../../hooks/useBaby'
 import { useAllMilestones, useSaveMilestones } from '../../hooks/useMilestones'
+
 import {
   AddButton,
   AddInput,
@@ -15,7 +16,7 @@ import {
   Wrapper,
 } from './styles'
 
-function EditarMarcos() {
+export function EditarMarcos() {
   const navigate = useNavigate()
   const { data: baby } = useBaby()
   const { data: milestones } = useAllMilestones(baby?.id)
@@ -59,7 +60,7 @@ function EditarMarcos() {
       }))
 
     await saveMilestones.mutateAsync({ babyId: baby.id, toggles, newTitles })
-    navigate('/album')
+    void navigate('/album')
   }
 
   if (!milestones) return null
@@ -130,5 +131,3 @@ function EditarMarcos() {
     </Wrapper>
   )
 }
-
-export default EditarMarcos

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
 import { signOut } from '../../services/auth.service'
+
 import {
   CloseButton,
   LogoutButton,
@@ -19,7 +20,7 @@ export function SideMenu({ isOpen, onClose }: SideMenuProps) {
 
   const handleLogout = async () => {
     await signOut()
-    navigate('/login')
+    void navigate('/login')
   }
 
   return (

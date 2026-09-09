@@ -2,13 +2,14 @@ import { useState, type SubmitEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AuthLayout } from '../../components/AuthLayout'
-import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { FormError } from '../../components/FormError'
+import { Input } from '../../components/Input'
 import { signIn } from '../../services/auth.service'
+
 import { Actions, ForgotPasswordLink, Form } from './styles'
 
-function Login() {
+export function Login() {
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -23,7 +24,7 @@ function Login() {
 
     try {
       await signIn({ email, password })
-      navigate('/home')
+      void navigate('/home')
     } catch {
       setError('E-mail ou senha inválidos.')
     } finally {
@@ -75,5 +76,3 @@ function Login() {
     </AuthLayout>
   )
 }
-
-export default Login
