@@ -35,6 +35,16 @@ function Album() {
     if (!baby) return
 
     const link = `${window.location.origin}/album/publico/${baby.id}`
+    const title = `Álbum de ${baby.nickname || baby.name}`
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url: link })
+      } catch (error) {
+        if ((error as Error).name === 'AbortError') return
+      }
+      return
+    }
 
     try {
       await navigator.clipboard.writeText(link)
