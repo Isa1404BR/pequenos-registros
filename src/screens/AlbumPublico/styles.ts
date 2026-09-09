@@ -9,36 +9,8 @@ export const Wrapper = styled.div`
   margin: 0 auto;
 `
 
-export const TitleRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.sm};
-`
-
 export const Title = styled.h1`
   font-size: 1.25rem;
-`
-
-export const ShareButton = styled.button`
-  border: none;
-  background: transparent;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 1.25rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.xs};
-  border-radius: ${({ theme }) => theme.radii.pill};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.surface};
-  }
-`
-
-export const ShareFeedback = styled.p`
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.75;
 `
 
 export const EmptyState = styled.p`
@@ -73,22 +45,6 @@ export const MilestoneDate = styled.span`
   font-size: 0.9375rem;
 `
 
-export const EditButton = styled.button`
-  margin-left: auto;
-  border: none;
-  background: transparent;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 1.0625rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.xs};
-  border-radius: ${({ theme }) => theme.radii.pill};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.background};
-  }
-`
-
 export const CardBody = styled.div`
   display: flex;
   flex-direction: column;
@@ -109,7 +65,6 @@ export const PhotoList = styled.div`
 
 export const Photo = styled.img`
   width: 100%;
-  max-height: 420px;
-  object-fit: cover;
+  height: auto;
   border-radius: ${({ theme }) => theme.radii.md};
 `

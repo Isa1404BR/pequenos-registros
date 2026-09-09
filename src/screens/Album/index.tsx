@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
@@ -16,6 +17,9 @@ import {
   MilestoneTitle,
   Photo,
   PhotoList,
+  ShareButton,
+  ShareFeedback,
+  TitleRow,
   Title,
   Wrapper,
 } from './styles'
@@ -25,6 +29,22 @@ function Album() {
   const { user } = useAuth()
   const { data: baby } = useBaby()
   const { data: milestones = [] } = useMilestones(baby?.id)
+  const [shareFeedback, setShareFeedback] = useState<string | null>(null)
+
+  const handleShareAlbum = async () => {
+    if (!baby) return
+
+    const link = `${window.location.origin}/album/publico/${baby.id}`
+
+    try {
+      await navigator.clipboard.writeText(link)
+      setShareFeedback('Link copiado!')
+    } catch {
+      setShareFeedback(link)
+    }
+
+    setTimeout(() => setShareFeedback(null), 3000)
+  }
 
   const registeredMilestones = [...milestones]
     .filter((milestone) => milestone.event_date)
@@ -37,7 +57,18 @@ function Album() {
 
   return (
     <Wrapper>
-      <Title>Registros de {baby.nickname || baby.name}</Title>
+      <TitleRow>
+        <Title>Registros de {baby.nickname || baby.name}</Title>
+        <ShareButton
+          type="button"
+          onClick={handleShareAlbum}
+          aria-label="Compartilhar álbum"
+        >
+          🔗
+        </ShareButton>
+      </TitleRow>
+
+      {shareFeedback && <ShareFeedback>{shareFeedback}</ShareFeedback>}
 
       {registeredMilestones.length === 0 && (
         <EmptyState>Nenhum marco registrado ainda.</EmptyState>
