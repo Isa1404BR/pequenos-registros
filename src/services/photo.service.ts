@@ -1,9 +1,13 @@
 import { supabase } from './supabase'
 
+export type MediaType = 'photo' | 'video'
+
 export type Photo = {
   id: string
   milestone_id: string
   storage_path: string
+  media_type: MediaType
+  poster_path: string | null
   tags: string[]
   created_at: string
   updated_at: string
@@ -38,6 +42,44 @@ export async function uploadMilestonePhoto(
   const { data, error } = await supabase
     .from('photos')
     .insert({ milestone_id: milestoneId, storage_path: path, tags })
+    .select()
+    .single()
+
+  if (error) throw error
+
+  return data as Photo
+}
+
+export async function uploadMilestoneVideo(
+  babyId: string,
+  milestoneId: string,
+  file: File,
+  poster: Blob,
+) {
+  const baseDir = `${babyId}/${milestoneId}/${crypto.randomUUID()}`
+  const videoPath = `${baseDir}-${file.name}`
+  const posterPath = `${baseDir}-poster.jpg`
+
+  const { error: videoError } = await supabase.storage
+    .from('photos')
+    .upload(videoPath, file, { contentType: file.type })
+
+  if (videoError) throw videoError
+
+  const { error: posterError } = await supabase.storage
+    .from('photos')
+    .upload(posterPath, poster, { contentType: 'image/jpeg' })
+
+  if (posterError) throw posterError
+
+  const { data, error } = await supabase
+    .from('photos')
+    .insert({
+      milestone_id: milestoneId,
+      storage_path: videoPath,
+      poster_path: posterPath,
+      media_type: 'video',
+    })
     .select()
     .single()
 
@@ -90,9 +132,10 @@ export async function getPhotosByMilestoneIds(milestoneIds: string[]) {
 }
 
 export async function deleteMilestonePhoto(photo: Photo) {
-  const { error: storageError } = await supabase.storage
-    .from('photos')
-    .remove([photo.storage_path])
+  const paths = [photo.storage_path]
+  if (photo.poster_path) paths.push(photo.poster_path)
+
+  const { error: storageError } = await supabase.storage.from('photos').remove(paths)
 
   if (storageError) throw storageError
 

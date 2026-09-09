@@ -12,6 +12,7 @@ import {
   MilestoneTitle,
   Photo,
   PhotoList,
+  Video,
   Title,
   Wrapper,
 } from './styles'
@@ -53,9 +54,19 @@ function AlbumPublico() {
               <CardBody>
                 {photos.length > 0 && (
                   <PhotoList>
-                    {photos.map((photo) => (
-                      <Photo key={photo.id} src={photo.url} alt={milestone.title} />
-                    ))}
+                    {photos.map((photo) =>
+                      photo.media_type === 'video' ? (
+                        <Video
+                          key={photo.id}
+                          src={photo.url}
+                          poster={photo.posterUrl ?? undefined}
+                          controls
+                          preload="none"
+                        />
+                      ) : (
+                        <Photo key={photo.id} src={photo.url} alt={milestone.title} />
+                      ),
+                    )}
                   </PhotoList>
                 )}
                 {milestone.description && (

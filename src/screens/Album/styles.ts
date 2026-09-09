@@ -113,3 +113,10 @@ export const Photo = styled.img`
   object-fit: cover;
   border-radius: ${({ theme }) => theme.radii.md};
 `
+
+export const Video = styled.video`
+  width: 100%;
+  max-height: 420px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: #000;
+`

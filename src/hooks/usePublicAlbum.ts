@@ -36,6 +36,9 @@ export function usePublicAlbumPhotos(milestoneIds: string[]) {
         photos.map(async (photo) => ({
           ...photo,
           url: await getPublicPhotoUrl(photo.storage_path),
+          posterUrl: photo.poster_path
+            ? await getPublicPhotoUrl(photo.poster_path)
+            : null,
         })),
       )
 

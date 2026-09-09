@@ -6,6 +6,7 @@ import { DatePicker } from '../../components/DatePicker'
 import { FormError } from '../../components/FormError'
 import { Input } from '../../components/Input'
 import { PhotoUpload, type PhotoUploadItem } from '../../components/PhotoUpload'
+import { VideoUpload } from '../../components/VideoUpload'
 import { Textarea } from '../../components/Textarea'
 import type { Baby } from '../../services/baby.service'
 import type { Milestone } from '../../services/milestone.service'
@@ -17,6 +18,7 @@ import {
   useMilestonePhotos,
   useUpdatePhotoTags,
   useUploadMilestonePhoto,
+  useUploadMilestoneVideo,
   type MilestonePhoto,
 } from '../../hooks/usePhotos'
 import { FieldRow, Form, Title, Wrapper } from './styles'
@@ -26,6 +28,12 @@ type NewPhoto = {
   file: File
   previewUrl: string
   tags: string[]
+}
+
+type NewVideo = {
+  file: File
+  poster: Blob
+  previewUrl: string
 }
 
 function EditarMarco() {
@@ -53,6 +61,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
 
   const updateMilestone = useUpdateMilestone()
   const uploadPhoto = useUploadMilestonePhoto()
+  const uploadVideo = useUploadMilestoneVideo()
   const deletePhoto = useDeleteMilestonePhoto()
   const updatePhotoTags = useUpdatePhotoTags()
   const { data: availableTags = [] } = useBabyTags(baby.id)
@@ -61,6 +70,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
   const [description, setDescription] = useState(milestone.description ?? '')
   const [eventDate, setEventDate] = useState(milestone.event_date ?? '')
   const [newPhotos, setNewPhotos] = useState<NewPhoto[]>([])
+  const [newVideo, setNewVideo] = useState<NewVideo | null>(null)
   const [removedPhotoIds, setRemovedPhotoIds] = useState<string[]>([])
   const [tagOverrides, setTagOverrides] = useState<Record<string, string[]>>({})
   const [error, setError] = useState<string | null>(null)
@@ -71,12 +81,25 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
     }
   }, [newPhotos])
 
+  useEffect(() => {
+    return () => {
+      if (newVideo) URL.revokeObjectURL(newVideo.previewUrl)
+    }
+  }, [newVideo])
+
   const keptExistingPhotos = existingPhotos.filter(
     (photo) => !removedPhotoIds.includes(photo.id),
   )
 
+  const keptExistingImages = keptExistingPhotos.filter(
+    (photo) => photo.media_type === 'photo',
+  )
+  const keptExistingVideo = keptExistingPhotos.find(
+    (photo) => photo.media_type === 'video',
+  )
+
   const photoItems: PhotoUploadItem[] = [
-    ...keptExistingPhotos.map((photo) => ({
+    ...keptExistingImages.map((photo) => ({
       id: photo.id,
       previewUrl: photo.url,
       tags: tagOverrides[photo.id] ?? photo.tags,
@@ -88,11 +111,31 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
     })),
   ]
 
+  const videoItem = newVideo
+    ? { previewUrl: newVideo.previewUrl }
+    : keptExistingVideo
+      ? { previewUrl: keptExistingVideo.url, posterUrl: keptExistingVideo.posterUrl }
+      : null
+
   const handleAddPhoto = (file: File) => {
     setNewPhotos((prev) => [
       ...prev,
       { id: crypto.randomUUID(), file, previewUrl: URL.createObjectURL(file), tags: [] },
     ])
+  }
+
+  const handleAddVideo = (file: File, poster: Blob) => {
+    setNewVideo({ file, poster, previewUrl: URL.createObjectURL(file) })
+  }
+
+  const handleRemoveVideo = () => {
+    if (newVideo) {
+      setNewVideo(null)
+      return
+    }
+    if (keptExistingVideo) {
+      setRemovedPhotoIds((prev) => [...prev, keptExistingVideo.id])
+    }
   }
 
   const handleRemovePhoto = (photoId: string) => {
@@ -116,6 +159,7 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
   const isSaving =
     updateMilestone.isPending ||
     uploadPhoto.isPending ||
+    uploadVideo.isPending ||
     deletePhoto.isPending ||
     updatePhotoTags.isPending
 
@@ -136,8 +180,8 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
       return
     }
 
-    if (!trimmedDescription && photoItems.length === 0) {
-      setError('Adicione uma foto ou uma descrição para o marco.')
+    if (!trimmedDescription && photoItems.length === 0 && !videoItem) {
+      setError('Adicione uma foto, um vídeo ou uma descrição para o marco.')
       return
     }
 
@@ -163,6 +207,16 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
             tags: photo.tags,
           }),
         ),
+        ...(newVideo
+          ? [
+              uploadVideo.mutateAsync({
+                babyId: baby.id,
+                milestoneId: milestone.id,
+                file: newVideo.file,
+                poster: newVideo.poster,
+              }),
+            ]
+          : []),
         ...Object.entries(tagOverrides)
           .filter(([photoId]) => !removedPhotoIds.includes(photoId))
           .map(([photoId, tags]) =>
@@ -210,6 +264,13 @@ function MarcoForm({ baby, milestone, existingPhotos }: MarcoFormProps) {
           onRemove={handleRemovePhoto}
           onTagsChange={handleTagsChange}
           availableTags={availableTags}
+          disabled={isSaving}
+        />
+
+        <VideoUpload
+          video={videoItem}
+          onAdd={handleAddVideo}
+          onRemove={handleRemoveVideo}
           disabled={isSaving}
         />
 

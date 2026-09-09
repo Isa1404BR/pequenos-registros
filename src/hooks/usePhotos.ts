@@ -8,10 +8,19 @@ import {
   getPhotosByMilestoneIds,
   updatePhotoTags,
   uploadMilestonePhoto,
+  uploadMilestoneVideo,
   type Photo,
 } from '../services/photo.service'
 
-export type MilestonePhoto = Photo & { url: string }
+export type MilestonePhoto = Photo & { url: string; posterUrl: string | null }
+
+export async function withMediaUrls(photo: Photo): Promise<MilestonePhoto> {
+  return {
+    ...photo,
+    url: await getPhotoSignedUrl(photo.storage_path),
+    posterUrl: photo.poster_path ? await getPhotoSignedUrl(photo.poster_path) : null,
+  }
+}
 
 export function useMilestonePhotos(milestoneId: string | undefined) {
   return useQuery({
@@ -19,14 +28,7 @@ export function useMilestonePhotos(milestoneId: string | undefined) {
     queryFn: async () => {
       const photos = await getMilestonePhotos(milestoneId as string)
 
-      const withUrls = await Promise.all(
-        photos.map(async (photo) => ({
-          ...photo,
-          url: await getPhotoSignedUrl(photo.storage_path),
-        })),
-      )
-
-      return withUrls as MilestonePhoto[]
+      return Promise.all(photos.map(withMediaUrls))
     },
     enabled: !!milestoneId,
   })
@@ -40,12 +42,7 @@ export function useAlbumPhotos(milestoneIds: string[]) {
     queryFn: async () => {
       const photos = await getPhotosByMilestoneIds(milestoneIds)
 
-      const withUrls = await Promise.all(
-        photos.map(async (photo) => ({
-          ...photo,
-          url: await getPhotoSignedUrl(photo.storage_path),
-        })),
-      )
+      const withUrls = await Promise.all(photos.map(withMediaUrls))
 
       const photosByMilestone = new Map<string, MilestonePhoto[]>()
       withUrls.forEach((photo) => {
@@ -78,6 +75,27 @@ export function useUploadMilestonePhoto() {
         queryKey: ['milestone-photos', milestoneId],
       })
       queryClient.invalidateQueries({ queryKey: ['baby-tags', babyId] })
+    },
+  })
+}
+
+type UploadMilestoneVideoInput = {
+  babyId: string
+  milestoneId: string
+  file: File
+  poster: Blob
+}
+
+export function useUploadMilestoneVideo() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ babyId, milestoneId, file, poster }: UploadMilestoneVideoInput) =>
+      uploadMilestoneVideo(babyId, milestoneId, file, poster),
+    onSuccess: (_photo, { milestoneId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['milestone-photos', milestoneId],
+      })
     },
   })
 }

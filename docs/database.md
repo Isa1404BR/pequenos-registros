@@ -66,15 +66,19 @@ Cada marco possui apenas uma descrição e uma data (`event_date`) — usada par
 
 ## photos
 
-Representa fotos associadas a um marco.
+Representa a mídia (fotos e vídeo) associada a um marco. Apesar do nome, a tabela guarda os dois tipos, diferenciados por `media_type`.
 
-Cada marco pode ter de 1 a 10 fotos (regra validada na aplicação). Cada arquivo é limitado a 10 MB na seleção e recomprimido no cliente (máx. 2000 px, WebP/JPEG 80%) antes do upload.
+Cada marco pode ter de 1 a 10 fotos (regra validada na aplicação). Cada foto é limitada a 10 MB na seleção e recomprimida no cliente (máx. 2000 px, WebP/JPEG 80%) antes do upload.
+
+Cada marco pode ter no máximo 1 vídeo, em `.mp4`, de até 60 segundos e 20 MB. O vídeo não é recomprimido; apenas uma miniatura JPEG é gerada no cliente e guardada em `poster_path`.
 
 Campos previstos:
 
 - id
 - milestone_id
 - storage_path
+- media_type (`'photo'` | `'video'`, default `'photo'`)
+- poster_path (caminho da miniatura JPEG do vídeo; `null` para fotos)
 - tags (array com strings adicionadas pelo usuário ao adicionar a foto)
 - created_at
 - updated_at
@@ -86,7 +90,7 @@ Bucket único: `photos` (privado).
 Convenção de caminho dos arquivos:
 
 - `{baby_id}/profile/{arquivo}` — foto de perfil do bebê, referenciada em `babies.photo_url`. Não gera linha em `photos`, já que não está associada a um marco.
-- `{baby_id}/{milestone_id}/{arquivo}` — fotos de marcos, referenciadas em `photos.storage_path`.
+- `{baby_id}/{milestone_id}/{arquivo}` — fotos e vídeos de marcos, referenciados em `photos.storage_path`. A miniatura de um vídeo fica no mesmo diretório, com sufixo `-poster.jpg`, referenciada em `photos.poster_path`.
 
 As policies de acesso do bucket usam apenas o primeiro segmento do caminho (`baby_id`) para autorizar leitura/escrita, então ambos os casos são cobertos pelas mesmas regras — sem necessidade de buckets ou policies separados.
 
