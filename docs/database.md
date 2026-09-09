@@ -68,7 +68,7 @@ Cada marco possui apenas uma descrição e uma data (`event_date`) — usada par
 
 Representa fotos associadas a um marco.
 
-Cada marco pode ter de 1 a 3 fotos (regra validada na aplicação).
+Cada marco pode ter de 1 a 10 fotos (regra validada na aplicação). Cada arquivo é limitado a 10 MB na seleção e recomprimido no cliente (máx. 2000 px, WebP/JPEG 80%) antes do upload.
 
 Campos previstos:
 

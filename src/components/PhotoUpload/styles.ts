@@ -6,6 +6,12 @@ export const Wrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
 `
 
+export const HelperText = styled.p`
+  margin: 0;
+  font-size: 0.75rem;
+  color: ${({ theme }) => theme.colors.text}99;
+`
+
 export const SlotsRow = styled.div`
   display: flex;
   flex-wrap: wrap;

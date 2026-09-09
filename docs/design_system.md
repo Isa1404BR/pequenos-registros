@@ -109,4 +109,6 @@ Componentes iniciais:
 
 ### UploadImage — upload múltiplo de fotos em um marco
 
-Um marco pode ter de 1 a 3 fotos. A tela de edição/registro de marco começa com um único slot de upload; um botão "adicionar outra foto" permite incluir até mais 2 slots, de forma dinâmica (não são exibidos os 3 slots de uma vez).
+Um marco pode ter de 1 a 10 fotos. A tela de edição/registro de marco começa com um único slot de upload; um botão "adicionar outra foto" permite incluir novos slots de forma dinâmica (não são exibidos todos de uma vez).
+
+Cada foto pode ter no máximo 10 MB no momento da seleção. Antes do envio, a imagem é redimensionada no navegador para no máximo 2000 px no maior lado e recomprimida em WebP (com fallback para JPEG) a 80% de qualidade — ver `src/utils/compressImage.ts`.

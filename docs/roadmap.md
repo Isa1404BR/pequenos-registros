@@ -36,14 +36,14 @@
 
 ## Fase 4 — Onboarding
 
-- [ ] Cadastro do bebê
-- [ ] Criação dos marcos padrão
+- [x] Cadastro do bebê
+- [x] Criação dos marcos padrão
 
 ## Fase 5 — Álbum
 
 - [ ] Home
 - [ ] Visualização dos marcos (ordenados por `event_date`)
-- [ ] Adicionar registro (descrição + data + 1 a 3 fotos)
+- [ ] Adicionar registro (descrição + data + 1 a 10 fotos)
 - [ ] Editar registro
 - [ ] Adicionar fotos
 - [ ] Remover fotos
